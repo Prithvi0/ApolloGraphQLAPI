@@ -1,3 +1,11 @@
+/** It modifies stored user data & returns a value.
+ * It can be used to perform CRUD operations.
+ * Mutations are defined as a part of the schema.
+ * @sync
+ * @param {string} args -   User Validations based on the input.
+ * @return {Error}      -   The data from the input given.
+ */
+
 const userModel = require('../../model/user');
 
 exports.register = async (parent, args, context) => {

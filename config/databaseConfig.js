@@ -1,3 +1,10 @@
+/** It connects to mongo database using mongodb default url.
+ * @method 
+ * @param {URL} MONGO_URL               -  Defined in the `.env`
+ * @property {ConnectionOptions} boolean -  To pass option to mongo connection (fix deprecation warnings).
+ * @returns - message
+ */
+
 const mongoose = require('mongoose');
 require('dotenv').config();
 

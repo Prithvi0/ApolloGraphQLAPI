@@ -1,3 +1,8 @@
+/** It is a collection of type definitions (typeDefs) that together
+ * defines the shape of queries executed against the user data.
+ * @property {string} gql   -   Defines the queryable fields for every user.
+ */
+
 const { gql } = require('apollo-server');
 
 exports.typeDefs = gql`
