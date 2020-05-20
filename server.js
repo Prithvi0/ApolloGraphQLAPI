@@ -3,6 +3,9 @@ require('dotenv').config();
 const port = process.env.PORT || 4000;
 
 const { ApolloServer } = require('apollo-server');
+const { typeDefs } = require('./graphQL/schema');
+
+const resolvers = require('./graphQL/resolver').resolvers;
 
 // The ApolloServer constructor with parameters: schema definition & set of resolvers
 module.exports = server = new ApolloServer({ typeDefs, resolvers });
