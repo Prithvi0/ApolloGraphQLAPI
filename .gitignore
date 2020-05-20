@@ -1,1 +1,9 @@
+# Directory Dependency
 node_modules/
+
+# Packages
+package-lock.json
+package.json
+
+# Environment Variable
+.env
