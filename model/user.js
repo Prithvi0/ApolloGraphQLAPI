@@ -13,17 +13,22 @@ const schema = mongoose.Schema;
 const userSchema = new schema({
     userName: {
         type: String,
-        require: true,
+        required: [true, 'user name required'],
+        minlength: 3,
+        maxlength: 10
     },
 
     emailId: {
         type: String,
-        require: true
+        required: [true, 'e-mail required'],
+        unique: true
     },
 
     password: {
         type: String,
-        require: true
+        required: [true, 'password required'],
+        minlength: 5,
+        maxlength: 15
     },
 },
     {
