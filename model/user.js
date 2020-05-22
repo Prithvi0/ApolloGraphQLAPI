@@ -17,17 +17,15 @@ const userSchema = new schema({
         minlength: 3,
         maxlength: 10
     },
-
     emailId: {
         type: String,
         required: [true, 'e-mail required'],
         unique: true
     },
-
     password: {
         type: String,
         required: [true, 'password required'],
-        minlength: 5,
+        minlength: 8,
         maxlength: 15
     },
 },
