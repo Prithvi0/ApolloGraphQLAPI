@@ -8,8 +8,6 @@
 
 const userModel = require('../../model/user');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const mail = require('../../sendEmail/sendEmail');
 
 exports.register = async (parent, args, context) => {
     // validate user name
@@ -45,33 +43,26 @@ exports.register = async (parent, args, context) => {
         throw new Error('e-mail already registered');
     }
 
+    password = await bcrypt.hash(args.password, 12);
+
     const newUser = new userModel({
         userName: args.userName,
         emailId: args.emailId,
-        password: bcrypt.hash(args.password, 10)
+        password: password
     });
 
     // save user
     const saveUser = await newUser.save();
 
     if (saveUser) {
-        tokenData = { "emailId": args.emailId };
-        token = jwt.sign(tokenData, process.env.SECRET);
-        payload = { "userEmail": data.emailId };
-        mail.sendEmail(token, payload, (err, result) => {
-            if (err) {
-                return err
-            }
-            else {
-                return (null,
-                    { message: "User Registered Sucessfully. Check your e-mail",
-                      status: true
-                });
-            }
-        });
-    };
-    return {
-        message: 'Registration Failed!',
-        success: false
-    };
+        return {
+            message: 'Registration Success!',
+            status: true
+        };
+    } else {
+        return {
+            message: 'Registration Failed!',
+            success: false
+        };
+    }
 }
