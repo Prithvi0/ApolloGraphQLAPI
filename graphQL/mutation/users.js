@@ -7,6 +7,9 @@
  */
 
 const userModel = require('../../model/user');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const mail = require('../../sendEmail/sendEmail');
 
 exports.register = async (parent, args, context) => {
     // validate user name
@@ -15,7 +18,7 @@ exports.register = async (parent, args, context) => {
     }
     if (args.userName.length < 3) {
         throw new Error('Minimum of 3 characters required.')
-    }    
+    }
 
     // validate e-mail
     const emailRegex = /^[a-zA-Z]+([+-_.][a-zA-Z0-9])*[0-9]*\@[a-z0-9]+[.]([a-z]{2,4}[.])?[a-z]{2,4}$/;
@@ -45,21 +48,30 @@ exports.register = async (parent, args, context) => {
     const newUser = new userModel({
         userName: args.userName,
         emailId: args.emailId,
-        password: args.password
+        password: bcrypt.hash(args.password, 10)
     });
 
     // save user
     const saveUser = await newUser.save();
 
     if (saveUser) {
-        return {
-            message: 'Registration Success!',
-            success: true
-        };
-    } else {
-        return {
-            message: 'Registration Failed!',
-            success: false
-        };
-    }
+        tokenData = { "emailId": args.emailId };
+        token = jwt.sign(tokenData, process.env.SECRET);
+        payload = { "userEmail": data.emailId };
+        mail.sendEmail(token, payload, (err, result) => {
+            if (err) {
+                return err
+            }
+            else {
+                return (null,
+                    { message: "User Registered Sucessfully. Check your e-mail",
+                      status: true
+                });
+            }
+        });
+    };
+    return {
+        message: 'Registration Failed!',
+        success: false
+    };
 }
