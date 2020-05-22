@@ -15,7 +15,8 @@
     "dotenv": "^8.2.0",
     "graphql": "^15.0.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.9.15"
+    "mongoose": "^5.9.15",
+    "nodemailer": "^6.4.6"
   },
   "contributes": {
     "markdown.markdownItPlugins": true
