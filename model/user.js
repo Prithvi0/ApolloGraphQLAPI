@@ -26,7 +26,6 @@ const userSchema = new schema({
         type: String,
         required: [true, 'password required'],
         minlength: 8,
-        maxlength: 15
     },
 },
     {
