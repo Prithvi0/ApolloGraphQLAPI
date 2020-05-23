@@ -6,6 +6,7 @@
 
 const message = require('../graphQL/query').message;
 const register = require('../graphQL/mutation/users').register;
+const login = require('../graphQL/mutation/users').login;
 
 // resolvers
 exports.resolvers = {
@@ -14,6 +15,7 @@ exports.resolvers = {
     },
 
     Mutation: {
-        register
+        register,
+        login
     }
 }
