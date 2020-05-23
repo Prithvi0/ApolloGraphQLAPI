@@ -8,6 +8,8 @@
 
 const userModel = require('../../model/user');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const secret = process.env.SECRET;
 
 exports.register = async (parent, args, context) => {
     // validate user name
@@ -57,7 +59,7 @@ exports.register = async (parent, args, context) => {
     if (saveUser) {
         return {
             message: 'Registration Success!',
-            status: true
+            success: true
         };
     } else {
         return {
@@ -65,4 +67,30 @@ exports.register = async (parent, args, context) => {
             success: false
         };
     }
+}
+
+exports.login = async (parent, args, context) => {
+    const user = await userModel.findOne({
+        emailId: args.emailId
+    });
+    bcrypt.compare(args.password, user.password, (err, result) => {
+        if (err) {            
+            return {
+                message: 'Invalid password. Authentication failed',
+                success: false,                
+            };
+        }
+        if (result) {
+            const token = jwt.sign({
+                emailId: user.emailId,
+                password: user.password
+            }, secret, { expiresIn: '12h' });
+
+            return {
+                message: 'Authentication successful',
+                success: true,
+                token: token
+            };
+        }
+    });
 }
