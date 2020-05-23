@@ -17,6 +17,7 @@ type User {
 type Auth {
     message : String!
     success : Boolean!
+    token: String!
 }
 
 type Query {
@@ -27,4 +28,5 @@ type Query {
 # execute, along with the return type for each (from Auth defined above)
 type Mutation {
     register(userName: String!, emailId: String!, password: String!): Auth
+    login(emailId: String!, password: String!): Auth
 }`
