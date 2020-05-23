@@ -70,27 +70,24 @@ exports.register = async (parent, args, context) => {
 }
 
 exports.login = async (parent, args, context) => {
-    const user = await userModel.findOne({
+    let user = await userModel.findOne({
         emailId: args.emailId
     });
-    bcrypt.compare(args.password, user.password, (err, result) => {
-        if (err) {            
-            return {
-                message: 'Invalid password. Authentication failed',
-                success: false,                
-            };
+    let comparePass = await bcrypt.compare(args.password, user.password)
+    if (comparePass) {
+        let token = jwt.sign(
+            {
+                emailId: user.emailId
+            }, secret, { expiresIn: "12h" });
+        return {
+            message: 'Login successful',
+            success: 'true',
+            token: token
         }
-        if (result) {
-            const token = jwt.sign({
-                emailId: user.emailId,
-                password: user.password
-            }, secret, { expiresIn: '12h' });
-
-            return {
-                message: 'Authentication successful',
-                success: true,
-                token: token
-            };
-        }
-    });
+    }
+    return {
+        message: 'Invalid password. Authentication failed',
+        success: 'false',
+        token: 'invalid'
+    }
 }
