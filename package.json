@@ -1,7 +1,7 @@
 {
-  "name": "apollo-graphql-REST-API",
+  "name": "apollo-graphql-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "Build APIs for users using GraphQL, MongoDB and Mongoose.",
   "main": "server.js",
   "scripts": {
     "test": "node server.js"
