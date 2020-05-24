@@ -19,7 +19,7 @@ exports.sendEmail = token => {
         if (error) {
             console.log(error);
         } else {
-            console.log("E-mail sent" + info);
+            console.log("E-mail sent" + info.response);
         }
     });
 }
