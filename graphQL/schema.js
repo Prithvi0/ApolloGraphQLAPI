@@ -29,4 +29,5 @@ type Query {
 type Mutation {
     register(userName: String!, emailId: String!, password: String!): Auth
     login(emailId: String!, password: String!): Auth
+    forgotPass(emailId: String!): Auth
 }`
