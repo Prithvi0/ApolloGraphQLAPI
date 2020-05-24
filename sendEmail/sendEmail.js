@@ -1,16 +1,17 @@
 const mail = require('nodemailer');
 
-exports.sendEmail = (token, payload) => {
+exports.sendEmail = token => {
     const transporter = mail.createTransport({
-        service: 'TempMail',
+        service: 'Gmail',
         auth: {
             user: process.env.EMAIL,
+            pass: process.env.PASSWORD
         }
     });
 
     const mailOptions = {
         from: process.env.EMAIL,
-        to: payload.emailId,
+        to: process.env.EMAIL,
         subject: 'Sending E-mail using Node.js',
         text: `${token}`
     };
@@ -18,7 +19,7 @@ exports.sendEmail = (token, payload) => {
         if (error) {
             console.log(error);
         } else {
-            console.log("E-mail sent" + info.response);
+            console.log("E-mail sent" + info);
         }
     });
 }
