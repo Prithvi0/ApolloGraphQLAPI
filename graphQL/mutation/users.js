@@ -10,6 +10,8 @@ const userModel = require('../../model/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const secret = process.env.SECRET;
+const mail = require('../../sendEmail/sendEmail');
+let url = process.env.GRAPHQL_URL;
 
 exports.register = async (parent, args, context) => {
     // validate user name
@@ -89,5 +91,27 @@ exports.login = async (parent, args, context) => {
         message: 'Invalid password. Authentication failed',
         success: 'false',
         token: 'invalid'
+    }
+}
+
+exports.forgotPassword = async (parent, args, context) => {
+    let user = await userModel.findOneAndUpdate({
+        emailId: args.emailId
+    });
+    if (user) {
+        let token = jwt.sign(
+            {
+                emailId: user.emailId
+            }, secret, { expiresIn: '12h' });
+        mail.sendEmail(url + `${token}`);
+        return {
+            message: 'E-mail sent to change password.',
+            success: true
+        }
+    } else {
+        return {
+            message: 'Not a valid request.',
+            success: false
+        }
     }
 }
