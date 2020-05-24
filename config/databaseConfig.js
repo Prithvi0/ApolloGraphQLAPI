@@ -12,7 +12,8 @@ module.exports = mongoose.connect(process.env.MONGO_URL,
     {
         useNewUrlParser: true,
         useUnifiedTopology: true,
-        useCreateIndex: true
+        useCreateIndex: true,
+        useFindAndModify: false
     }).then(() => {
         console.log("Successfully connected to the database");
     }).catch(err => {
