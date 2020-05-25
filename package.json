@@ -4,7 +4,8 @@
   "description": "Build APIs for users using GraphQL, MongoDB and Mongoose.",
   "main": "server.js",
   "scripts": {
-    "test": "node server.js"
+    "start": "node server.js",
+    "test": "mocha test"
   },
   "keywords": [],
   "author": "",
@@ -13,12 +14,17 @@
     "apollo-server": "^2.13.1",
     "bcryptjs": "^2.4.3",
     "dotenv": "^8.2.0",
-    "graphql": "^15.0.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.15",
     "nodemailer": "^6.4.6"
   },
   "contributes": {
     "markdown.markdownItPlugins": true
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "graphql": "^15.0.0",
+    "mocha": "^7.2.0",
+    "supertest": "^4.0.2"
   }
 }
