@@ -8,16 +8,20 @@ const message = require('../graphQL/query').message;
 const register = require('../graphQL/mutation/users').register;
 const login = require('../graphQL/mutation/users').login;
 const forgotPass = require('../graphQL/mutation/users').forgotPassword;
+const resetPass = require('../graphQL/mutation/users').resetPassword;
+const allUsers = require('../graphQL/query').getAllUsers;
 
 // resolvers
 exports.resolvers = {
     Query: {
-        message
+        message,
+        allUsers
     },
 
     Mutation: {
         register,
         login,
-        forgotPass
+        forgotPass,
+        resetPass
     }
 }

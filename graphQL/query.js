@@ -3,8 +3,13 @@
  * @returns -   Welcome message
  */
 
-require('../model/user');
+const userModel = require('../model/user');
 
 exports.message = () => {
     return 'Welcome User!';
 }
+
+exports.getAllUsers = () => {
+    return userModel.find().exec();
+}
+return new Error('There might be a connection error. Retry again.');
