@@ -11,9 +11,15 @@ const schema = mongoose.Schema;
 
 // defining mongodb schema
 const userSchema = new schema({
-    userName: {
+    firstName: {
         type: String,
-        required: [true, 'user name required'],
+        required: [true, 'first name required'],
+        minlength: 3,
+        maxlength: 10
+    },
+    lastName: {
+        type: String,
+        required: [false, 'expected 3-10 characters'],
         minlength: 3,
         maxlength: 10
     },
