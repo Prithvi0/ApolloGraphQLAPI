@@ -14,11 +14,17 @@ const mail = require('../../sendEmail/sendEmail');
 let url = process.env.GRAPHQL_URL;
 
 exports.register = async (parent, args, context) => {
-    // validate user name
-    if (args.userName === null) {
-        throw new Error('User name can not be blank.')
+    // validate user first name
+    if (args.firstName === null) {
+        throw new Error('First name cannot be blank.')
     }
-    if (args.userName.length < 3) {
+
+    // validate user last name
+    if (args.lastName === null) {
+        throw new Error('Last name cannot be blank.')
+    }
+
+    if (args.firstName.length < 3 || args.lastName.length < 3) {
         throw new Error('Minimum of 3 characters required.')
     }
 
@@ -50,7 +56,8 @@ exports.register = async (parent, args, context) => {
     password = await bcrypt.hash(args.password, 12);
 
     const newUser = new userModel({
-        userName: args.userName,
+        firstName: args.firstName,
+        lastName: args.lastName,
         emailId: args.emailId,
         password: password
     });
@@ -80,7 +87,7 @@ exports.login = async (parent, args, context) => {
         let token = jwt.sign(
             {
                 emailId: user.emailId
-            }, secret, { expiresIn: "12h" });
+            }, secret, { expiresIn: "12d" });
         return {
             message: 'Login successful',
             success: 'true',
@@ -102,7 +109,7 @@ exports.forgotPassword = async (parent, args, context) => {
         let token = jwt.sign(
             {
                 emailId: user.emailId
-            }, secret, { expiresIn: '12h' });
+            }, secret, { expiresIn: '12d' });
         mail.sendEmail(url + `${token}`);
         return {
             message: 'E-mail sent to change password.',
@@ -112,6 +119,26 @@ exports.forgotPassword = async (parent, args, context) => {
         return {
             message: 'Not a valid request.',
             success: false
+        }
+    }
+}
+
+exports.resetPassword = async (parent, args, context) => {
+    var user = jwt.verify(context.token, secret);
+    var user = await userModel.findOneAndUpdate({ emailId: user.emailId });
+    if (args.newPass === args.confirmPass) {
+        let password = bcrypt.hash(args.newPass,12)
+        let updateUser = await userModel.update({ password: password })
+        if (updateUser) {
+            return {
+                message: 'Password successfully updated.',
+                success: 'true'
+            }
+        }
+    } else {
+        return {
+            message: 'Entered passwords don\'t match.',
+            success: 'false'
         }
     }
 }
