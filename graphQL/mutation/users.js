@@ -12,6 +12,7 @@ const jwt = require('jsonwebtoken');
 const secret = process.env.SECRET;
 const mail = require('../../sendEmail/sendEmail');
 let url = process.env.GRAPHQL_URL;
+let shortUrl = require('node-url-shortener');
 
 exports.register = async (parent, args, context) => {
     // validate user first name
@@ -102,7 +103,7 @@ exports.login = async (parent, args, context) => {
 }
 
 exports.forgotPassword = async (parent, args, context) => {
-    let user = await userModel.findOneAndUpdate({
+    let user = await userModel.findOne({
         emailId: args.emailId
     });
     if (user) {
@@ -110,7 +111,7 @@ exports.forgotPassword = async (parent, args, context) => {
             {
                 emailId: user.emailId
             }, secret, { expiresIn: '12d' });
-        mail.sendEmail(url + `${token}`);
+        this.urlShort(mail.sendEmail(url + `${token}`));
         return {
             message: 'E-mail sent to change password.',
             success: true
@@ -124,14 +125,20 @@ exports.forgotPassword = async (parent, args, context) => {
 }
 
 exports.resetPassword = async (parent, args, context) => {
-    var user = jwt.verify(context.token, secret);
-    var user = await userModel.findOneAndUpdate({ emailId: user.emailId });
+    let userAuthorization = jwt.verify(context.authorization, secret);
+    if (!userAuthorization) {
+        throw new Error("Invalid user token authentication")
+    }
+    let user = await userModel.findOne({ emailId: user.emailId });
+    if (!user) {
+        throw new Error("Invalid password reset link")
+    }
     if (args.newPass === args.confirmPass) {
-        let password = bcrypt.hash(args.newPass,12)
+        let password = bcrypt.hash(args.newPass, 12)
         let updateUser = await userModel.update({ password: password })
         if (updateUser) {
             return {
-                message: 'Password successfully updated.',
+                message: 'Password successfully resetted.',
                 success: 'true'
             }
         }
@@ -143,42 +150,8 @@ exports.resetPassword = async (parent, args, context) => {
     }
 }
 
-const graphql = require('graphql');
-const schema = require('../schema').typeDefs;
-
-module.exports = {
-    graphql: async (req, res) => {
-      try {
-        const result = await graphql(schema, req.body.query, req);
-        if (result.errors) throw (result.errors);
-        return res.ok(result);
-      } catch (err) {
-        return res.badRequest(err);
-      }
-    }
+exports.urlShort = urlShort => {
+    shortUrl.short(urlShort, (err, urlShort) => {
+        mail.sendEmail(urlShort);
+    });
 }
-
-// url-shortener
-let request = require("request");
-let linkRequest = {
-  destination: "https://www.youtube.com/channel/UCHK4HD0ltu1-I212icLPt3g",
-  domain: { fullName: "rebrand.ly" }
-  //, slashtag: "A_NEW_SLASHTAG"
-  //, title: "Rebrandly YouTube channel"
-}
-
-let requestHeaders = {
-  "Content-Type": "application/json",
-  "apikey": "YOUR_API_KEY",
-  "workspace": "YOUR_WORKSPACE_ID"
-}
-
-request({
-    uri: "https://api.rebrandly.com/v1/links",
-    method: "POST",
-    body: JSON.stringify(linkRequest),
-    headers: requestHeaders
-}, (err, response, body) => {
-  let link = JSON.parse(body);
-  console.log(`Long URL was ${link.destination}, short URL is ${link.shortUrl}`);
-})
