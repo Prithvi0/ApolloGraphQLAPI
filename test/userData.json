@@ -1,0 +1,12 @@
+{
+    "register" : "mutation {register(firstName:\"aaa\" lastName:\"aaa\" emailId:\"abc@gmail.com\" password:\"qwerty123\"){message success}",
+
+    "login" : "mutation {login(emailId:\"ccc@gmail.com\"password:\"qwerty123\"){message success}}",
+
+    "getUserById": "query {getUserById(id:\"5ecc82809ef38b11ff68709d\"){firstName }}",
+    
+    "forgotPass": "mutation {forgotPassword(emailId:\"ccc@gmail.com\"){message success}}" ,
+
+    "resetPass" : "mutation {resetPassword(password:\"12345678\"){message success} }"
+
+}
