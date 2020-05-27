@@ -1,4 +1,5 @@
 const userModel = require('../model/user');
+const notesModel = require('../model/notesModel/note');
 
 /** It returns a Welcome message for the user.
  * @function
@@ -23,4 +24,11 @@ exports.getUserById = (parent, args) => {
 exports.getAllUsers = () => {
     return userModel.find().exec();
 }
-return new Error('There might be a connection error. Retry again.');
+
+exports.getNotesByUserId = (parent, args) => {
+    return notesModel.findById(args.userId).exec();
+}
+
+exports.getAllNotes = () => {
+    return notesModel.find().exec();
+}
