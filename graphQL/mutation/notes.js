@@ -1,4 +1,4 @@
-const notesModel = require('../../model/notesModel/note');
+const notesModel = require('../../model/note');
 const jwt = require('jsonwebtoken');
 const secret = process.env.SECRET;
 

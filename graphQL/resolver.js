@@ -23,7 +23,6 @@ const updateLabel = require('../graphQL/mutation/labels').updateLabel;
 const deleteLabel = require('../graphQL/mutation/labels').deleteLabel;
 const labelsByUserId = require('../graphQL/query').getLabelsByUserId;
 const allLabels = require('../graphQL/query').getAllLabels;
- 
 
 // resolvers
 exports.resolvers = {

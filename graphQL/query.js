@@ -1,6 +1,6 @@
 const userModel = require('../model/user');
-const notesModel = require('../model/notesModel/note');
-const labelsModel = require('../model/notesModel/label');
+const notesModel = require('../model/note');
+const labelsModel = require('../model/label');
 
 /** It returns a Welcome message for the user.
  * @function
