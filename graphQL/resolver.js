@@ -17,6 +17,13 @@ const updateNote = require('../graphQL/mutation/notes').updateNote;
 const deleteNote = require('../graphQL/mutation/notes').deleteNote;
 const notesByUserId = require('../graphQL/query').getNotesByUserId;
 const allNotes = require('../graphQL/query').getAllNotes;
+const createLabel = require('../graphQL/mutation/labels').createLabel;
+const retrieveLabel = require('../graphQL/mutation/labels').retrieveLabel;
+const updateLabel = require('../graphQL/mutation/labels').updateLabel;
+const deleteLabel = require('../graphQL/mutation/labels').deleteLabel;
+const labelsByUserId = require('../graphQL/query').getLabelsByUserId;
+const allLabels = require('../graphQL/query').getAllLabels;
+ 
 
 // resolvers
 exports.resolvers = {
@@ -25,7 +32,9 @@ exports.resolvers = {
         allUsers,
         userById,
         notesByUserId,
-        allNotes
+        allNotes,
+        labelsByUserId,
+        allLabels
     },
 
     Mutation: {
@@ -36,6 +45,10 @@ exports.resolvers = {
         createNote,
         retrieveNote,
         updateNote,
-        deleteNote
+        deleteNote,
+        createLabel,
+        retrieveLabel,
+        updateLabel,
+        deleteLabel
     }
 }

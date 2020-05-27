@@ -15,9 +15,16 @@ type User {
     password : String!
 }
 
+# This "Note" type defines the queryable fields for every notes in the data source.
 type Note {
     title : String!
     Description : String!
+    userId: ID!
+}
+
+# This "Label" type defines the queryable fields for every labels in the data source.
+type Label {
+    labelName: String!
     userId: ID!
 }
 
