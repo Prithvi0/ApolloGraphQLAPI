@@ -15,6 +15,12 @@ type User {
     password : String!
 }
 
+type Note {
+    title : String!
+    Description : String!
+    userId: ID!
+}
+
 type Response {
     message : String!
     success : Boolean!
