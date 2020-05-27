@@ -15,7 +15,7 @@ exports.createNote = async (parent, args, context) => {
     const newNote = new notesModel({
         title: args.title,
         description: args.description,
-        userId: userAuthorization.id
+        userId: userAuthorization.userId
     });
 
     // save note
@@ -56,7 +56,7 @@ exports.retrieveNote = async (parent, args, context) => {
 }
 
 exports.updateNote = async (parent, args, context) => {
-    let userNote = await notesModel.findByIdAndUpdate(args.id, {
+    let userNote = await notesModel.findByIdAndUpdate(args.userId, {
         title: args.title,
         description: args.description
     }, { new: true })
@@ -74,7 +74,7 @@ exports.updateNote = async (parent, args, context) => {
 }
 
 exports.deleteNote = async(parent, args, context) => {
-    let userNote = await notesModel.findByIdAndDelete(args.id)
+    let userNote = await notesModel.findByIdAndDelete(args.userId)
     if (userNote) {
         return {
             message: 'User note has been deleted.',
