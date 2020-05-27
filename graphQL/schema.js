@@ -17,6 +17,7 @@ type User {
 
 # This "Note" type defines the queryable fields for every notes in the data source.
 type Note {
+    id: ID!
     title : String!
     Description : String!
     userId: ID!
@@ -24,6 +25,7 @@ type Note {
 
 # This "Label" type defines the queryable fields for every labels in the data source.
 type Label {
+    id: ID!
     labelName: String!
     userId: ID!
 }
@@ -38,6 +40,10 @@ type Query {
     message : String!
     allUsers: [User!]!
     userById(id: ID!): User!
+    allNotes: [Note!]!
+    notesByUserId(userId: ID!): Note!
+    allLabels: [Label!]!
+    labelsByUserId(userId: ID!): Label!
 }
 
 # It registers all of the available queries that clients can
@@ -47,4 +53,12 @@ type Mutation {
     login(emailId: String!, password: String!): Response
     forgotPass(emailId: String!): Response
     resetPass(newPass: String!, confirmPass: String!): Response
+    createNote(title: String!, description: String!): Response
+    retrieveNote(id: ID!): Response
+    updateNote(id: ID!, title: String!, description: String!): Response
+    deleteNote(id: ID!): Response
+    createLabel(labelName: String!): Response
+    retrieveLabel(id: ID!): Response
+    updateLabel(id: ID!, title: String!): Response
+    deleteLabel(id: ID!): Response
 }`
