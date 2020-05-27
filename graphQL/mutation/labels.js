@@ -2,15 +2,13 @@ const labelsModel = require('../../model/notesModel/label');
 const jwt = require('jsonwebtoken');
 const secret = process.env.SECRET;
 
-// validate label name
-if (!args.labelName) {
-    throw new Error('Label name can\'t be empty');
-}
-
 exports.createLabel = async (parent, args, context) => {
     let userAuthorization = jwt.verify(context.authorization, secret);
     if (!userAuthorization) {
         throw new Error("Invalid user token authentication")
+    }
+    if (!args.labelName) {
+        throw new Error('Label name can\'t be empty');
     }
     const newLabel = new labelsModel({
         labelName: args.labelName,

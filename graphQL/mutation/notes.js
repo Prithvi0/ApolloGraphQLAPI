@@ -2,15 +2,13 @@ const notesModel = require('../../model/notesModel/note');
 const jwt = require('jsonwebtoken');
 const secret = process.env.SECRET;
 
-// validate description
-if (!args.description) {
-    throw new Error('Description can\'t be empty');
-}
-
 exports.createNote = async (parent, args, context) => {
     let userAuthorization = jwt.verify(context.authorization, secret);
     if (!userAuthorization) {
         throw new Error("Invalid user token authentication")
+    }
+    if (!args.description) {
+        throw new Error('Description can\'t be empty');
     }
     const newNote = new notesModel({
         title: args.title,
