@@ -30,28 +30,6 @@ exports.createLabel = async (parent, args, context) => {
     }
 }
 
-exports.retrieveLabel = async (parent, args, context) => {
-    let user = await labelsModel.findOne({
-        userId: args.userId
-    });
-    if (args.userId === user.userId) {
-        let token = jwt.sign(
-            {
-                userId: user.userId
-            }, secret, { expiresIn: "12d" });
-        return {
-            message: 'Label found',
-            success: 'true',
-            token: token
-        }
-    }
-    return {
-        message: 'Invalid ID. Label not found',
-        success: 'false',
-        token: 'invalid'
-    }
-}
-
 exports.updateLabel = async (parent, args, context) => {
     let userLabel = await labelsModel.findByIdAndUpdate(args.userId, {
         labelName: args.labelName,

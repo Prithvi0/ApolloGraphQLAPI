@@ -4,6 +4,7 @@ const secret = process.env.SECRET;
 
 exports.createNote = async (parent, args, context) => {
     let userAuthorization = jwt.verify(context.authorization, secret);
+    console.log(context.authorization)
     if (!userAuthorization) {
         throw new Error("Invalid user token authentication")
     }
@@ -28,28 +29,6 @@ exports.createNote = async (parent, args, context) => {
             message: 'Note not created!',
             success: 'false'
         };
-    }
-}
-
-exports.retrieveNote = async (parent, args, context) => {
-    let user = await notesModel.findOne({
-        userId: args.userId
-    });
-    if (args.userId === user.userId) {
-        let token = jwt.sign(
-            {
-                userId: user.userId
-            }, secret, { expiresIn: "12d" });
-        return {
-            message: 'Note found',
-            success: 'true',
-            token: token
-        }
-    }
-    return {
-        message: 'Invalid ID. Note not found',
-        success: 'false',
-        token: 'invalid'
     }
 }
 

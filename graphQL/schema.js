@@ -54,11 +54,9 @@ type Mutation {
     forgotPass(emailId: String!): Response
     resetPass(newPass: String!, confirmPass: String!): Response
     createNote(title: String!, description: String!): Response
-    retrieveNote(id: ID!): Response
     updateNote(id: ID!, title: String!, description: String!): Response
     deleteNote(id: ID!): Response
     createLabel(labelName: String!): Response
-    retrieveLabel(id: ID!): Response
     updateLabel(id: ID!, title: String!): Response
     deleteLabel(id: ID!): Response
 }`
