@@ -14,7 +14,7 @@ exports.createNote = async (parent, args, context) => {
     const newNote = new notesModel({
         title: args.title,
         description: args.description,
-        userId: userAuthorization.userId
+        userId: userAuthorization.id
     });
 
     // save note
@@ -22,45 +22,45 @@ exports.createNote = async (parent, args, context) => {
     if (saveNote) {
         return {
             message: 'Note created!',
-            success: 'true'
+            success: true
         };
     } else {
         return {
             message: 'Note not created!',
-            success: 'false'
+            success: false
         };
     }
 }
 
 exports.updateNote = async (parent, args, context) => {
-    let userNote = await notesModel.findByIdAndUpdate(args.userId, {
+    let userNote = await notesModel.findByIdAndUpdate(args.id, {
         title: args.title,
         description: args.description
     }, { new: true })
     if (userNote) {
         return {
             message: 'User note has been updated.',
-            success: 'true'
+            success: true
         }
     } else {
         return {
             message: 'User Id not found. Unable to update.',
-            success: 'false'
+            success: false
         }
     }
 }
 
 exports.deleteNote = async(parent, args, context) => {
-    let userNote = await notesModel.findByIdAndDelete(args.userId)
+    let userNote = await notesModel.findByIdAndDelete(args.id)
     if (userNote) {
         return {
             message: 'User note has been deleted.',
-            success: 'true'
+            success: true
         }
     } else {
         return {
             message: 'User id not found. Unable to delete.',
-            success: 'false'
+            success: false
         }
     }
 }
