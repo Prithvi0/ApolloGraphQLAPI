@@ -91,13 +91,13 @@ exports.login = async (parent, args, context) => {
             }, secret, { expiresIn: "12d" });
         return {
             message: 'Login successful',
-            success: 'true',
+            success: true,
             token: token
         }
     }
     return {
         message: 'Invalid password. Authentication failed',
-        success: 'false',
+        success: false,
         token: 'invalid'
     }
 }
@@ -111,7 +111,7 @@ exports.forgotPassword = async (parent, args, context) => {
             {
                 emailId: user.emailId
             }, secret, { expiresIn: '12d' });
-        this.urlShort(mail.sendEmail(url + `${token}`));
+        this.urlShort(mail.sendEmail(url + token));
         return {
             message: 'E-mail sent to change password.',
             success: true
@@ -126,26 +126,27 @@ exports.forgotPassword = async (parent, args, context) => {
 
 exports.resetPassword = async (parent, args, context) => {
     let userAuthorization = jwt.verify(context.authorization, secret);
+    console.log(userAuthorization)
     if (!userAuthorization) {
         throw new Error("Invalid user token authentication")
     }
-    let user = await userModel.findOne({ emailId: user.emailId });
+    console.log(userAuthorization.emailId);
+    let user = userModel.findOne({ emailId: userAuthorization.emailId });
     if (!user) {
         throw new Error("Invalid password reset link")
     }
-    if (args.newPass === args.confirmPass) {
-        let password = bcrypt.hash(args.newPass, 12)
-        let updateUser = await userModel.update({ password: password })
-        if (updateUser) {
-            return {
-                message: 'Password successfully resetted.',
-                success: 'true'
-            }
+    let newPass = bcrypt.hash(args.newPass, 12)
+    let updateUser = userModel.update(
+        { _id: args._id }, { password: newPass });
+    if (updateUser) {
+        return {
+            message: 'Password successfully resetted.',
+            success: true
         }
     } else {
         return {
             message: 'Entered passwords don\'t match.',
-            success: 'false'
+            success: false
         }
     }
 }
