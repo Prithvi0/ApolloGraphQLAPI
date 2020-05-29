@@ -1,6 +1,7 @@
 const userModel = require('../model/user');
 const notesModel = require('../model/note');
 const labelsModel = require('../model/label');
+const collabsModel = require('../model/collaborator');
 
 /** It returns a Welcome message for the user.
  * @function
@@ -40,4 +41,8 @@ exports.getLabelsByUserId = (parent, args) => {
 
 exports.getAllLabels = () => {
     return labelsModel.find().exec();
+}
+
+exports.getCollabsByUserId = (parent, args) => {
+    return collabsModel.findById(args.userId).exec();
 }

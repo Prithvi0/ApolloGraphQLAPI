@@ -23,6 +23,12 @@ type Note {
     userId: ID!
 }
 
+type Collab {
+    id: ID!
+    userId: ID!
+    collabId: ID!
+}
+
 # This "Label" type defines the queryable fields for every labels in the data source.
 type Label {
     id: ID!
@@ -44,6 +50,7 @@ type Query {
     notesByUserId(userId: ID!): Note!
     allLabels: [Label!]!
     labelsByUserId(userId: ID!): Label!
+    collabsByUserId(userId: ID!): Collab!
 }
 
 # It registers all of the available queries that clients can
@@ -59,4 +66,5 @@ type Mutation {
     createLabel(labelName: String!): Response
     updateLabel(id: ID!, title: String!): Response
     deleteLabel(id: ID!): Response
+    createCollab(id: ID!, collabId: ID!): Response
 }`
