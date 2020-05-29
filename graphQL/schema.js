@@ -19,7 +19,7 @@ type User {
 type Note {
     id: ID!
     title : String!
-    Description : String!
+    description : String!
     userId: ID!
 }
 

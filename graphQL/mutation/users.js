@@ -136,8 +136,8 @@ exports.resetPassword = async (parent, args, context) => {
         throw new Error("Invalid password reset link")
     }
     let newPass = bcrypt.hash(args.newPass, 12)
-    let updateUser = userModel.update(
-        { _id: args._id }, { password: newPass });
+    let updateUser = user.update(
+        { password: newPass });
     if (updateUser) {
         return {
             message: 'Password successfully resetted.',
