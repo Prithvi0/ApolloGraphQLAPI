@@ -50,7 +50,7 @@ exports.updateNote = async (parent, args, context) => {
     }
 }
 
-exports.deleteNote = async(parent, args, context) => {
+exports.deleteNote = async (parent, args, context) => {
     let userNote = await notesModel.findByIdAndDelete(args.id)
     if (userNote) {
         return {
@@ -60,6 +60,36 @@ exports.deleteNote = async(parent, args, context) => {
     } else {
         return {
             message: 'User id not found. Unable to delete.',
+            success: false
+        }
+    }
+}
+
+exports.archiveNote = async (parent, args, context) => {
+    let userNote = await notesModel.findOneAndUpdate(args.id, { archive: true }, { new: true })
+    if (userNote) {
+        return {
+            message: 'User note has been archived.',
+            success: true
+        }
+    } else {
+        return {
+            message: 'NoteId not found. Unable to archive.',
+            success: false
+        }
+    }
+}
+
+exports.unArchiveNote = async (parent, args, context) => {
+    let userNote = await notesModel.findOneAndUpdate(args.id, { archive: false }, { new: true })
+    if (userNote) {
+        return {
+            message: 'User note has been unArchived.',
+            success: true
+        }
+    } else {
+        return {
+            message: 'NoteId not found. Unable to unArchive.',
             success: false
         }
     }

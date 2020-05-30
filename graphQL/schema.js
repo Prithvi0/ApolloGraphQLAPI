@@ -21,14 +21,13 @@ type Note {
     title : String!
     description : String!
     userId: ID!
+    archive: Boolean!
 }
 
 type Collab {
     id: ID!
-    userId: ID!
     collabId: ID!
-    title: String!
-    description: String!
+    NoteId: ID!
 }
 
 # This "Label" type defines the queryable fields for every labels in the data source.
@@ -53,6 +52,7 @@ type Query {
     allLabels: [Label!]!
     labelsByUserId(userId: ID!): Label!
     collabsByUserId(userId: ID!): Collab!
+    getArchiveNotes: [Note!]!
 }
 
 # It registers all of the available queries that clients can
@@ -70,4 +70,6 @@ type Mutation {
     deleteLabel(id: ID!): Response
     createCollab(noteId: ID!, collabId: ID!): Response
     deleteCollab(noteId: ID!, collabId: ID!): Response
+    archiveNotes(id: ID!): Response
+    unArchiveNotes(id: ID!): Response
 }`

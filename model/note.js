@@ -14,10 +14,14 @@ const NoteSchema = new Schema({
         minlength: 1,
         maxlength: 30
     },
-    userId: [{
+    userId: {
         type: Schema.Types.ObjectId,
         ref: 'User'
-    }],
+    },
+    archive: {
+        type: Boolean,
+        default: false
+    }
 },
     {
         timestamps: true

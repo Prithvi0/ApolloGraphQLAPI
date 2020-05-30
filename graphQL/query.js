@@ -46,3 +46,7 @@ exports.getAllLabels = () => {
 exports.getCollabsByUserId = (parent, args) => {
     return collabsModel.findById(args.userId).exec();
 }
+
+exports.getArchiveNotes = () => {
+    return notesModel.find({ archive: true }).exec();
+}
