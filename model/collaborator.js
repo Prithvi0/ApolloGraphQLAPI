@@ -10,6 +10,16 @@ const CollabSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
+    title: {
+        type: String,
+        minlength: 1,
+        maxlength: 25
+    },
+    description: {
+        type: String,
+        minlength: 1,
+        maxlength: 30
+    },
 },
     {
         timestamps: true

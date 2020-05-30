@@ -27,6 +27,8 @@ type Collab {
     id: ID!
     userId: ID!
     collabId: ID!
+    title: String!
+    description: String!
 }
 
 # This "Label" type defines the queryable fields for every labels in the data source.
@@ -66,5 +68,6 @@ type Mutation {
     createLabel(labelName: String!): Response
     updateLabel(id: ID!, title: String!): Response
     deleteLabel(id: ID!): Response
-    createCollab(id: ID!, collabId: ID!): Response
+    createCollab(noteId: ID!, collabId: ID!): Response
+    deleteCollab(noteId: ID!, collabId: ID!): Response
 }`
