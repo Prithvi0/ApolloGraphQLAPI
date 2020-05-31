@@ -28,7 +28,7 @@ const NoteSchema = new Schema({
     },
     reminder: {
         type: Date,
-        default: [new Date().getTime() + 1, 'Remind time should be more than current time']
+        min: [new Date().getTime() + 1, 'Remind time should be more than current time']
     }
 },
     {
