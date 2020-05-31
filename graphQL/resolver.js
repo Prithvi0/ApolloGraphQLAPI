@@ -25,11 +25,13 @@ const createCollab = require('../graphQL/mutation/collaborators').createCollab;
 const collabsByUserId = require('../graphQL/query').getCollabsByUserId;
 const archiveNotes = require('../graphQL/mutation/notes').archiveNote;
 const unArchiveNotes = require('../graphQL/mutation/notes').unArchiveNote;
-
 const trashNotes = require('../graphQL/mutation/notes').trashNote;
 const unTrashNotes = require('../graphQL/mutation/notes').unTrashNote;
 const getArchiveNotes = require('../graphQL/query').getArchiveNotes;
 const getTrashNotes = require('../graphQL/query').getTrashNotes;
+const createReminder = require('../graphQL/mutation/reminders').createReminder;
+const putReminder = require('../graphQL/mutation/reminders').putReminder;
+const getReminders = require('../graphQL/query').getReminders;
 
 // resolvers
 exports.resolvers = {
@@ -43,7 +45,8 @@ exports.resolvers = {
         allLabels,
         collabsByUserId,
         getArchiveNotes,
-        getTrashNotes
+        getTrashNotes,
+        getReminders
     },
 
     Mutation: {
@@ -61,6 +64,8 @@ exports.resolvers = {
         archiveNotes,
         unArchiveNotes,
         trashNotes,
-        unTrashNotes
+        unTrashNotes,
+        createReminder,
+        putReminder
     }
 }

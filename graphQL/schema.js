@@ -6,6 +6,8 @@
 const { gql } = require('apollo-server');
 
 exports.typeDefs = gql`
+scalar Date
+
 # This "User" type defines the queryable fields for every user in the data source.
 type User {
     id : ID!
@@ -56,6 +58,7 @@ type Query {
     collabsByUserId(userId: ID!): Collab!
     getArchiveNotes: [Note!]!
     getTrashNotes: [Note!]!
+    getReminders: [Note!]!
 }
 
 # It registers all of the available queries that clients can
@@ -77,4 +80,6 @@ type Mutation {
     unArchiveNotes(id: ID!): Response
     trashNotes(id: ID!): Response
     unTrashNotes(id: ID!): Response
+    createReminder(title: String!, description: String!, reminder: Date!): Response
+    putReminder(reminder: Date!): Response
 }`

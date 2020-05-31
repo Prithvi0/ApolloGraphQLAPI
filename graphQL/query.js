@@ -54,3 +54,7 @@ exports.getArchiveNotes = () => {
 exports.getTrashNotes = () => {
     return notesModel.find({ trash: true }).exec();
 }
+
+exports.getReminders = (parent, args) => {
+    return notesModel.find(args.reminder).exec();
+}
