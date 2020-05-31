@@ -50,3 +50,7 @@ exports.getCollabsByUserId = (parent, args) => {
 exports.getArchiveNotes = () => {
     return notesModel.find({ archive: true }).exec();
 }
+
+exports.getTrashNotes = () => {
+    return notesModel.find({ trash: true }).exec();
+}

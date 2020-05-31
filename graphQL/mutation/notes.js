@@ -66,7 +66,7 @@ exports.deleteNote = async (parent, args, context) => {
 }
 
 exports.archiveNote = async (parent, args, context) => {
-    let userNote = await notesModel.findOneAndUpdate(args.id, { archive: true }, { new: true })
+    let userNote = await notesModel.findOneAndUpdate(args._id, { archive: true }, { new: true })
     if (userNote) {
         return {
             message: 'User note has been archived.',
@@ -74,22 +74,52 @@ exports.archiveNote = async (parent, args, context) => {
         }
     } else {
         return {
-            message: 'NoteId not found. Unable to archive.',
+            message: 'Note Id not found. Unable to archive.',
             success: false
         }
     }
 }
 
 exports.unArchiveNote = async (parent, args, context) => {
-    let userNote = await notesModel.findOneAndUpdate(args.id, { archive: false }, { new: true })
+    let userNote = await notesModel.findOneAndUpdate(args._id, { archive: false }, { new: true })
     if (userNote) {
         return {
-            message: 'User note has been unArchived.',
+            message: 'User note has been unarchived.',
             success: true
         }
     } else {
         return {
-            message: 'NoteId not found. Unable to unArchive.',
+            message: 'Note Id not found. Unable to unarchive.',
+            success: false
+        }
+    }
+}
+
+exports.trashNote = async (parent, args, context) => {
+    let userNote = await notesModel.findOneAndUpdate(args._id, { trash: true }, { new: true })
+    if (userNote) {
+        return {
+            message: 'User note has been moved to trash.',
+            success: true
+        }
+    } else {
+        return {
+            message: 'Note Id not found. Unable to trash.',
+            success: false
+        }
+    }
+}
+
+exports.unTrashNote = async (parent, args, context) => {
+    let userNote = await notesModel.findOneAndUpdate(args._id, { trash: false }, { new: true })
+    if (userNote) {
+        return {
+            message: 'User note has been removed from trash.',
+            success: true
+        }
+    } else {
+        return {
+            message: 'NoteId not found. Unable to untrash.',
             success: false
         }
     }
