@@ -4,11 +4,12 @@ const secret = process.env.SECRET;
 
 exports.createCollab = async (parent, args, context) => {
     let userAuthorization = jwt.verify(context.authorization, secret);
+    console.log(context.authorization);
     if (!userAuthorization) {
         throw new Error('Invalid user token authentication')
     }
-    let collab = await collabModel.find({
-        userId: args.noteId
+    let collab = await collabModel.updateOne({
+        collabId: args.collabId
     });
     if (!collab) {
         throw new Error('No such user Id found')
@@ -16,8 +17,7 @@ exports.createCollab = async (parent, args, context) => {
     const newNote = new collabModel({
         userId: userAuthorization.id,
         collabId: args.collabId,
-        title: args.title,
-        description: args.description
+        noteId: args.noteId
     });
 
     // save note
@@ -40,7 +40,7 @@ exports.deleteCollab = async (parent, args, context) => {
     if (!userAuthorization) {
         throw new Error('Invalid user token authentication')
     }
-    let userNote = await collabModel.findByIdAndDelete({ id: args.noteId })
+    let userNote = await userAuthorization.findByIdAndDelete({ _id: args.noteId })
     if (userNote) {
         return {
             message: 'User note has been deleted.',
