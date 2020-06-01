@@ -4,99 +4,89 @@
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 chai.use(chaiHttp);
+require('../server');
 const expect = require('chai').expect;
 const url = 'http://localhost:4000/';
-const request = require('supergraphqltest')(url);
+const request = require('supertest')(url);
 const fs = require("fs");
+const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbElkIjoiY2NjQGdtYWlsLmNvbSIsImlhdCI6MTU5MDk5OTY0MCwiZXhwIjoxNTkyMDM2NDQwfQ.CdROzL4X_NkKlIZtvZRH59WwHLTgDp4QzButNui2zeo'
 
+/** It is used to read user data from .json file & pass the APIs for GraphQL server.
+ * @function     -   read user data from .json file & parse
+ * @returns      -   user data as required
+ */
 function readFile() {
     var readData = fs.readFileSync('./test/userData.json');
     var data = JSON.parse(readData);
     return data;
 }
 
+/** It is used to return error when the APIs for GraphQL server.
+ * Used inside the testcases to control writing code again or avaiding DRY violation.
+ * @function
+ * @param {err}           -   passing an error paramater
+ * @returns {err}         -   error for the user data provided.
+ */
+function error(err) {
+    return err;
+}
+
 describe('Tests for User API', () => {
+    // User Registration (skipped. Can't register the user again and test case won't pass.)
+    it.skip('given user when registered correctly should return success message', () => {
+        request.post('/graphql')
+            .send({ query: readFile().register })
+            .expect(200)
+            .end((err, res) => {
+                error(err)
+                expect(JSON.parse(res.text).data.register.message).to.equal("Registration Success!");
+            })
+    })
 
-    describe('GraphQL', () => {
-        it('given graphQL server when given port should get connected', (done) => {
-            request.post('/graphql')
-                .send(url)
-                .expect(200)
-            done()
-        })
+    // User login
+    it('given user when logged in correctly should return success message', () => {
+        request.post('/graphql')
+            .send({ query: readFile().login })
+            .expect(200)
+            .end((err, res) => {
+                error(err)
+                expect(JSON.parse(res.text).data.login.message).to.equal("Login successful");
+            })
+    })
 
-        it('given graphQL server when given query and passed a message should return welcome message', (done) => {
-            request.post('/graphql')
-                .send({ query: '{message}' })
-                .expect('Welcome to Notes Application')
-            done()
-        })
+    // forgot password
+    it('given user when forgot password should return token as e-mail', () => {
+        request.post('/graphql')
+            .send({ query: readFile().forgotPass })
+            .expect(200)
+            .end((err, res) => {
+                error(err)
+                expect(JSON.parse(res.text).data.forgotPass.message).to.equal("E-mail sent to change password.");
+                expect(JSON.parse(res.text).data.forgotPass.success).to.equal(true);
+            })
+    })
 
-        it.skip('given user when stored in database should return user by Id', (done) => {
-            request.post('/graphql')
-                .send({ query: readFile().getUserById })
-                .expect(200)
-                .end((err, res) => {
-                    if (err) {
-                        return done(err);
-                    }
-                    expect(JSON.parse(res.text).data.getUserById.firstName).to.equals("shiva");
-                    done();
-                })
-        })
+    // reset password
+    it('given user when reset password should return token message', () => {
+        request.post('/graphql')
+            .set({ "authorization": token })
+            .send({ query: readFile().resetPass })
+            .expect(200)
+            .end((err, res) => {
+                error(err)
+                expect(JSON.parse(res.text).data.resetPass.message).to.equal("Password successfully resetted.")
+                expect(JSON.parse(res.text).data.resetPass.success).to.equal(true)
+            })
+    })
 
-        it.skip('given user when logged in correctly should return success message', (done) => {
-            request.post('/graphql')
-                .send({ query: readFile().login })
-                .expect(200)
-                .end((err, res) => {
-                    if (err) {
-                        return done(err);
-                    }
-                    expect(JSON.parse(res.text).data.login.message).to.equals("Login successful");
-                    done();
-                })
-        })
-
-        it.skip('given user when registered correctly should return success message', (done) => {
-            request.post('/graphql')
-                .send({ query: readFile().register })
-                .expect(400)
-                .end((err, res) => {
-                    if (err) {
-                        return done(err);
-                    }
-                    expect(JSON.parse(res.text).data.register.message).to.equals("Registration Success!");
-                    done();
-                })
-        })
-
-        it('given user when forgot password should return token as e-mail', (done) => {
-            request.post('/graphql')
-                .send({ query: readFile().forgotPass })
-                .expect(200)
-                .end((err, res) => {
-                    if (err) {
-                        return done(err);
-                    }
-                    expect(JSON.parse(res.text).data.forgotPass.message).to.equals("E-mail sent to change password.");
-                    expect(JSON.parse(res.text).data.forgotPass.success).to.equals(true);
-                    done();
-                })
-        })
-
-        it.skip('given user when reset password should return token message', (done) => {
-            request.post('/graphql')
-                .send({ query: readFile().resetPass })
-                .expect(200)
-                .end((err, res) => {
-                    if (err) {
-                        return done(err);
-                    }
-                    expect(JSON.parse(res.text).data.resetPass.message).to.equals("Password successfully resetted.");
-                    expect(JSON.parse(res.text).data.resetPass.success).to.equals(true);
-                    done();
-                })
-        })
+    // get user by id 
+    it('given user when stored in database should return user by Id', () => {
+        request.post('/graphql')
+            .send({ query: readFile().userById })
+            .expect(200)
+            .end((err, res) => {
+                error(err)
+                expect(JSON.parse(res.text).data.userById.firstName).to.equal("shiva");
+            })
     })
 })
