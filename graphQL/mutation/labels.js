@@ -1,7 +1,20 @@
+/** It modifies stored user label data & returns a value relating to notes label.
+ * It can be used to perform CRUD operations.
+ * Mutations are defined as a part of the schema.
+ */
+
+// Module imports
 const labelsModel = require('../../model/label');
 const jwt = require('jsonwebtoken');
 const secret = process.env.SECRET;
 
+/** It is used to create labels on userId.
+ * @sync
+ * @param {String, String} args, context       - args for labels, context for authorization (generated token).
+ * @constructor                                - parent is required.
+ * @returns {Error}                            - if User Validations are false based on the input.
+ * @returns {String, Boolean} message, success - true (Label saved), else false.
+ */
 exports.createLabel = async (parent, args, context) => {
     let userAuthorization = jwt.verify(context.authorization, secret);
     if (!userAuthorization) {
@@ -30,6 +43,12 @@ exports.createLabel = async (parent, args, context) => {
     }
 }
 
+/** It is used to edit and update the created Labels on userId.
+ * @sync
+ * @param {String} args                        - args for labels.
+ * @constructor                                - parent is required.
+ * @returns {String, Boolean} message, success - true (find by user id & update), else false.
+ */
 exports.updateLabel = async (parent, args, context) => {
     let userLabel = await labelsModel.findByIdAndUpdate(args.id, {
         labelName: args.labelName,
@@ -47,6 +66,12 @@ exports.updateLabel = async (parent, args, context) => {
     }
 }
 
+/** It is used to delete the created Labels on userId.
+ * @sync
+ * @param {String} args         - args for labels.
+ * @constructor                 - parent is required.
+ * @returns {} message, success - if true (find by user id & delete), else false.
+ */
 exports.deleteLabel = async(parent, args, context) => {
     let userLabel = await labelsModel.findByIdAndDelete(args.id)
     if (userLabel) {

@@ -4,6 +4,7 @@
  * @property {object} Mutation  -   Returns stored data and a specific value.
  */
 
+// query and mutation module imports
 const message = require('../graphQL/query').message;
 const register = require('../graphQL/mutation/users').register;
 const login = require('../graphQL/mutation/users').login;
@@ -30,7 +31,7 @@ const unTrashNotes = require('../graphQL/mutation/notes').unTrashNote;
 const getArchiveNotes = require('../graphQL/query').getArchiveNotes;
 const getTrashNotes = require('../graphQL/query').getTrashNotes;
 const createReminder = require('../graphQL/mutation/reminders').createReminder;
-const putReminder = require('../graphQL/mutation/reminders').putReminder;
+const setReminder = require('../graphQL/mutation/reminders').setReminder;
 const getReminders = require('../graphQL/query').getReminders;
 
 // resolvers
@@ -66,6 +67,6 @@ exports.resolvers = {
         trashNotes,
         unTrashNotes,
         createReminder,
-        putReminder
+        setReminder
     }
 }

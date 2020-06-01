@@ -6,6 +6,7 @@
 const { gql } = require('apollo-server');
 
 exports.typeDefs = gql`
+# A way to specify custom scalar type in GraphQL service implementations
 scalar Date
 
 # This "User" type defines the queryable fields for every user in the data source.
@@ -27,6 +28,7 @@ type Note {
     trash: Boolean!
 }
 
+# This "Collab" type defines the queryable fields for every note collabs in the data source.
 type Collab {
     id: ID!
     userId: ID!
@@ -41,12 +43,14 @@ type Label {
     userId: ID!
 }
 
+# It defines parameters to get after a mutation is provided.
 type Response {
     message : String!
     success : Boolean!
     token: String!
 }
 
+# It lists all available queries that clients can execute along with return type.
 type Query {
     message : String!
     allUsers: [User!]!
@@ -67,7 +71,7 @@ type Mutation {
     register(firstName: String!, lastName: String!, emailId: String!, password: String!): Response
     login(emailId: String!, password: String!): Response
     forgotPass(emailId: String!): Response
-    resetPass(newPass: String!, confirmPass: String!): Response
+    resetPass(newPass: String!): Response
     createNote(title: String!, description: String!): Response
     updateNote(id: ID!, title: String!, description: String!): Response
     deleteNote(id: ID!): Response
@@ -81,5 +85,5 @@ type Mutation {
     trashNotes(id: ID!): Response
     unTrashNotes(id: ID!): Response
     createReminder(title: String!, description: String!, reminder: Date!): Response
-    putReminder(reminder: Date!): Response
+    setReminder(reminder: Date!): Response
 }`

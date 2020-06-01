@@ -1,3 +1,9 @@
+/** It is used to send a token as an e-mail to the pre-defined user.
+ * Here, sender and receiver are same & values are set inside the .env file.
+ * To use gmail service, one needs to toggle ON the Access for less secure apps under google settings.
+ */
+
+// Module import
 const mail = require('nodemailer');
 
 exports.sendEmail = token => {

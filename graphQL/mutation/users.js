@@ -6,6 +6,7 @@
  * @return {Error}      -   The data from the input given.
  */
 
+// Module imports
 const userModel = require('../../model/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -14,6 +15,12 @@ const mail = require('../../sendEmail/sendEmail');
 let url = process.env.GRAPHQL_URL;
 let shortUrl = require('node-url-shortener');
 
+/** It is used to register User on firstName, lastName, emailId & password.
+ * @sync
+ * @param {String} args                        - args for User registration inputs.
+ * @returns {Error}                            - if User Validations are false based on the input.
+ * @returns {String, Boolean} message, success - true (User saved), else false.
+ */
 exports.register = async (parent, args, context) => {
     // validate user first name
     if (args.firstName === null) {
@@ -54,7 +61,7 @@ exports.register = async (parent, args, context) => {
         throw new Error('e-mail already registered');
     }
 
-    password = await bcrypt.hash(args.password, 12);
+    let password = await bcrypt.hash(args.password, 12);
 
     const newUser = new userModel({
         firstName: args.firstName,
@@ -79,6 +86,13 @@ exports.register = async (parent, args, context) => {
     }
 }
 
+/** It is used to Login the User using emailId & password.
+ * @sync
+ * @param {String} args                                   - args for user emailId.
+ * @var {hash} comparePass                                - inputted password is compared with hash password.
+ * @returns {String, Boolean, ID} message, success, token - true (User emailId is signed by JSON Web Token (JWT))
+ * & made private by adding a secret key in .env file, else returns false.
+ */
 exports.login = async (parent, args, context) => {
     let user = await userModel.findOne({
         emailId: args.emailId
@@ -102,6 +116,12 @@ exports.login = async (parent, args, context) => {
     }
 }
 
+/** It is used when user forgets the password. A url is sent as an e-mail.
+ * @sync
+ * @param {String} args                            - args to find user emailId. If found,
+ *                                                   an e-mail of graphql url, JWT attached is sent.
+ * @returns {String, Boolean, ID} message, success - true (valid user emailId), else returns false.
+ */
 exports.forgotPassword = async (parent, args, context) => {
     let user = await userModel.findOne({
         emailId: args.emailId
@@ -124,6 +144,18 @@ exports.forgotPassword = async (parent, args, context) => {
     }
 }
 
+/** It is used to Reset User password by providing user headers authorization token (JWT),
+ * generated for the user when logged in.
+ * @sync
+ * @param {String, String} args, context       - args for user new password, context for authorization (generated token).
+ * @constructor                                - parent is required.
+ * @param {String} userAuthorization.emailId   - find emailId using user's JWT.
+ * @param {String} args.newPass                - newPass is hash coded & a number (SaltRounds) is passed as an argument.
+ *                                              It is used to control time needed to calculate bcrypt hash. 
+ *                                              The more the time, the more the difficulty in Brute-forcing.
+ * @returns {String, Boolean} message, success - true (User password is resetted by a new password).
+ *                                               , else returns false.
+ */
 exports.resetPassword = async (parent, args, context) => {
     let userAuthorization = jwt.verify(context.authorization, secret);
     console.log(userAuthorization)
@@ -131,26 +163,32 @@ exports.resetPassword = async (parent, args, context) => {
         throw new Error("Invalid user token authentication")
     }
     console.log(userAuthorization.emailId);
-    let user = userModel.findOne({ emailId: userAuthorization.emailId });
+    let user = await userModel.findOne({ emailId: userAuthorization.emailId });
     if (!user) {
         throw new Error("Invalid password reset link")
     }
-    let newPass = bcrypt.hash(args.newPass, 12)
-    let updateUser = user.update(
-        { password: newPass });
-    if (updateUser) {
-        return {
-            message: 'Password successfully resetted.',
-            success: true
-        }
-    } else {
-        return {
-            message: 'Entered passwords don\'t match.',
-            success: false
+    if (args.newPass) {
+        let newPassword = bcrypt.hashSync(args.newPass, 12)
+        let updateUser = await user.updateOne(
+            { password: newPassword });
+        if (updateUser) {
+            return {
+                message: 'Password successfully resetted.',
+                success: true
+            };
+        } else {
+            return {
+                message: 'Password not resetted.',
+                success: false
+            };
         }
     }
 }
 
+/** It is used to generate a shortened url.
+ * @function (urlShort)
+ * @returns             - returns an e-mail with shortened url.
+ */
 exports.urlShort = urlShort => {
     shortUrl.short(urlShort, (err, urlShort) => {
         mail.sendEmail(urlShort);
