@@ -5,9 +5,11 @@
  * @returns - message
  */
 
+// Module imports
 const mongoose = require('mongoose');
 require('dotenv').config();
 
+// database connection using mongo url stored in .env file
 module.exports = mongoose.connect(process.env.MONGO_URL,
     {
         useNewUrlParser: true,

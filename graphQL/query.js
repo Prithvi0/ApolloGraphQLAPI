@@ -1,3 +1,6 @@
+/** It is used to request and fetch the specific data.
+ * Queries are the foundation of GraphQL, where QL stands for `Query Language`.
+ */
 
 // Module imports
 const userModel = require('../model/user');
@@ -46,7 +49,7 @@ exports.getNotesByUserId = (parent, args) => {
  * @returns -   all notes.
  */
 exports.getAllNotes = () => {
-    return notesModel.find().exec();
+    return notesModel.find({ archive: { $ne: true }, trash: { $ne: true } }).populate('Note').exec();
 }
 
 /** It returns labels on userId.

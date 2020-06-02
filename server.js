@@ -3,6 +3,7 @@
  * @param {port} message
  */
 
+// Module imports
 require('./config/databaseConfig');
 require('dotenv').config();
 const port = process.env.PORT || 4000;

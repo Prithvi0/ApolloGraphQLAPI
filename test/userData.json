@@ -1,12 +1,12 @@
 {
     "register" : "mutation {register(firstName:\"aaa\" lastName:\"abb\" emailId:\"abb@gmail.com\" password:\"qwerty123\"){message success}}",
 
-    "login" : "mutation {login(emailId:\"ccc@gmail.com\" password:\"qwerty123\"){message success}}",
+    "login" : "mutation {login(emailId:\"ccc@gmail.com\" password:\"12345678\"){message success}}",
 
     "userById": "query {userById(id:\"5ecc82809ef38b11ff68709d\"){firstName}}",
     
-    "forgotPass": "mutation {forgotPass(emailId:\"ccc@gmail.com\"){message success}}" ,
+    "forgotPass": "mutation {forgotPass(emailId:\"ccc@gmail.com\"){message success}}",
 
-    "resetPass" : "mutation {resetPass(newPass:\"12345678\" confirmPass:\"12345678\") {message success}}"
+    "resetPass" : "mutation {resetPass(newPass:\"123456789\"){message success}}"
 
 }
