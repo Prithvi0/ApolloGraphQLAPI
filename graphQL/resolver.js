@@ -33,6 +33,7 @@ const getTrashNotes = require('../graphQL/query').getTrashNotes;
 const createReminder = require('../graphQL/mutation/reminders').createReminder;
 const setReminder = require('../graphQL/mutation/reminders').setReminder;
 const getReminders = require('../graphQL/query').getReminders;
+const githubLoginUrl = require('../graphQL/query').githubLoginUrl;
 
 // resolvers
 exports.resolvers = {
@@ -47,7 +48,8 @@ exports.resolvers = {
         collabsByUserId,
         getArchiveNotes,
         getTrashNotes,
-        getReminders
+        getReminders,
+        githubLoginUrl
     },
 
     Mutation: {
@@ -67,6 +69,6 @@ exports.resolvers = {
         trashNotes,
         unTrashNotes,
         createReminder,
-        setReminder
+        setReminder,
     }
 }

@@ -63,6 +63,7 @@ type Query {
     getArchiveNotes: [Note!]!
     getTrashNotes: [Note!]!
     getReminders: [Note!]!
+    githubLoginUrl: String!
 }
 
 # It registers all of the available queries that clients can
