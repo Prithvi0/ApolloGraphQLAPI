@@ -7,6 +7,8 @@
 require('./config/databaseConfig');
 require('dotenv').config();
 const port = process.env.PORT || 4000;
+const axios = require('axios');
+const gitHubUser = process.env.GITHUB_USER;
 
 const { ApolloServer } = require('apollo-server');
 const { typeDefs } = require('./graphQL/schema');
@@ -20,6 +22,16 @@ module.exports = server = new ApolloServer({
         authorization: req.headers.authorization
     })
 });
+
+// requesting data from the GitHub API
+axios.get(gitHubUser)
+    .then((response) => {
+        console.log(response.data);
+        console.log(response.status);
+        console.log(response.statusText);
+        console.log(response.headers);
+        console.log(response.config);
+    });
 
 // The `listen` method launches a web server
 server.listen(port, err => {
