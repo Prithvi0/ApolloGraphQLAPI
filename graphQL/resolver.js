@@ -33,7 +33,7 @@ const getTrashNotes = require('../graphQL/query').getTrashNotes;
 const createReminder = require('../graphQL/mutation/reminders').createReminder;
 const setReminder = require('../graphQL/mutation/reminders').setReminder;
 const getReminders = require('../graphQL/query').getReminders;
-const githubLoginUrl = require('../graphQL/query').githubLoginUrl;
+const githubLoginUrl = require('../graphQL/mutation/gitHubAuthorization').githubLoginUrl;
 
 // resolvers
 exports.resolvers = {

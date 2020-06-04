@@ -102,11 +102,3 @@ exports.getTrashNotes = () => {
 exports.getReminders = (parent, args) => {
     return notesModel.find(args.reminder).exec();
 }
-
-/** It is used to return user code associated with the GitHub.
- * @function (githubLoginUrl)
- * @returns - user login authorization for GitHub.
- */
-exports.githubLoginUrl = () => {
-    return `${process.env.LOGIN_AUTH}${process.env.CLIENT_ID}&scope=user`
-}
