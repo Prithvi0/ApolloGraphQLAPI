@@ -23,24 +23,22 @@ type Note {
     id: ID!
     title : String!
     description : String!
-    userId: ID!
-    archive: Boolean!
-    trash: Boolean!
+    userId: String!
 }
 
 # This "Collab" type defines the queryable fields for every note collabs in the data source.
 type Collab {
     id: ID!
-    userId: ID!
-    collabId: ID!
-    noteId: ID!
+    userId: String!
+    collabId: String!
+    noteId: String!
 }
 
 # This "Label" type defines the queryable fields for every labels in the data source.
 type Label {
     id: ID!
     labelName: String!
-    userId: ID!
+    userId: String!
 }
 
 # It defines parameters to get after a mutation is provided.
@@ -54,16 +52,15 @@ type Response {
 type Query {
     message : String!
     allUsers: [User!]!
-    userById(id: ID!): User!
+    userById(id: String!): User!
     allNotes: [Note!]!
-    notesByUserId(userId: ID!): Note!
+    notesByUserId(userId: String!): Note!
     allLabels: [Label!]!
-    labelsByUserId(userId: ID!): Label!
-    collabsByUserId(userId: ID!): Collab!
+    labelsByUserId(userId: String!): Label!
+    collabsByUserId(userId: String!): Collab!
     getArchiveNotes: [Note!]!
     getTrashNotes: [Note!]!
     getReminders: [Note!]!
-    githubLoginUrl: String!
 }
 
 # It registers all of the available queries that clients can
@@ -79,12 +76,14 @@ type Mutation {
     createLabel(labelName: String!): Response
     updateLabel(id: ID!, title: String!): Response
     deleteLabel(id: ID!): Response
-    createCollab(noteId: ID!, collabId: ID!): Response
-    deleteCollab(noteId: ID!, collabId: ID!): Response
+    createCollab(noteId: String!, collabId: String!): Response
+    deleteCollab(noteId: String!, collabId: String!): Response
     archiveNotes(id: ID!): Response
     unArchiveNotes(id: ID!): Response
     trashNotes(id: ID!): Response
     unTrashNotes(id: ID!): Response
     createReminder(title: String!, description: String!, reminder: Date!): Response
     setReminder(reminder: Date!): Response
+    githubLoginUrl: String!
+    requestGithubToken(code: String!): Response
 }`
