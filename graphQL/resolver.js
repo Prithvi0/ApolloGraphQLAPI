@@ -35,6 +35,7 @@ const setReminder = require('../graphQL/mutation/reminders').setReminder;
 const getReminders = require('../graphQL/query').getReminders;
 const githubLoginUrl = require('../graphQL/mutation/gitHubAuthorization').githubLoginUrl;
 const requestGithubToken = require('../graphQL/mutation/gitHubAuthorization').requestGithubToken;
+const gitRepoDetails = require('../graphQL/mutation/gitHubAuthorization').githubRepoDetails;
 
 // resolvers
 exports.resolvers = {
@@ -71,6 +72,7 @@ exports.resolvers = {
         createReminder,
         setReminder,
         githubLoginUrl,
-        requestGithubToken
+        requestGithubToken,
+        githubRepoDetails
     }
 }

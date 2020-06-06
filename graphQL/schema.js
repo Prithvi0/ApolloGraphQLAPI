@@ -16,6 +16,9 @@ type User {
     lastName : String!
     emailId : String!
     password : String!
+    gitId: String!
+    gitUserName: String!
+    accessToken: String!
 }
 
 # This "Note" type defines the queryable fields for every notes in the data source.
@@ -86,4 +89,5 @@ type Mutation {
     setReminder(reminder: Date!): Response
     githubLoginUrl: String!
     requestGithubToken(code: String!): Response
+    githubRepoDetails: Response
 }`

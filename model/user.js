@@ -35,6 +35,18 @@ const userSchema = new schema({
         required: [true, 'password required'],
         minlength: 8,
     },
+    gitId: {
+        type: String,
+        required: [true, 'gitId required'],
+    },
+    gitUserName: {
+        type: String,
+        required: [true, 'git user name required'],
+    },
+    accessToken: {
+        type: String,
+        required: [true, 'access token required']
+    }
 },
     {
         timestamps: true

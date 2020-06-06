@@ -6,13 +6,13 @@
  * @return {Error}      -   The data from the input given.
  */
 
-// Module imports
+// Module imports and variables
 const userModel = require('../../model/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const secret = process.env.SECRET;
-const mail = require('../../sendEmail/sendEmail');
-let url = process.env.GRAPHQL_URL;
+const mail = require('../../services/sendEmail');
+let graphqlUrl = process.env.GRAPHQL_URL;
 let shortUrl = require('node-url-shortener');
 
 /** It is used to register User on firstName, lastName, emailId & password.
@@ -50,7 +50,7 @@ exports.register = async (parent, args, context) => {
         throw new Error('Password can not be blank. Please Enter a 8-character long password');
     }
     if (args.password.length < 8) {
-        throw new Error('password must be atleast 8 characters long');
+        throw new Error('Password must be atleast 8 characters long');
     }
 
     // check for user
@@ -58,7 +58,7 @@ exports.register = async (parent, args, context) => {
         emailId: args.emailId
     });
     if (user.length > 0) {
-        throw new Error('e-mail already registered');
+        throw new Error('E-mail already registered');
     }
 
     let password = await bcrypt.hash(args.password, 12);
@@ -131,7 +131,7 @@ exports.forgotPassword = async (parent, args, context) => {
             {
                 emailId: user.emailId
             }, secret, { expiresIn: '12d' });
-        this.urlShort(mail.sendEmail(url + token));
+        this.urlShort(mail.sendEmail(graphqlUrl + token));
         return {
             message: 'E-mail sent to change password.',
             success: true
@@ -151,8 +151,8 @@ exports.forgotPassword = async (parent, args, context) => {
  * @constructor                                - parent is required.
  * @param {String} userAuthorization.emailId   - find emailId using user's JWT.
  * @param {String} args.newPass                - newPass is hash coded & a number (SaltRounds) is passed as an argument.
- *                                              It is used to control time needed to calculate bcrypt hash. 
- *                                              The more the time, the more the difficulty in Brute-forcing.
+ *                                               It is used to control time needed to calculate bcrypt hash. 
+ *                                               The more the time, the more the difficulty in Brute-forcing.
  * @returns {String, Boolean} message, success - true (User password is resetted by a new password).
  *                                               , else returns false.
  */
@@ -165,7 +165,7 @@ exports.resetPassword = async (parent, args, context) => {
     console.log(userAuthorization.emailId);
     let user = await userModel.findOne({ emailId: userAuthorization.emailId });
     if (!user) {
-        throw new Error("Invalid password reset link")
+        throw new Error('Invalid password reset link')
     }
     if (args.newPass) {
         let newPassword = bcrypt.hashSync(args.newPass, 12)
