@@ -26,23 +26,19 @@ exports.githubLoginUrl = () => {
  * @param {String} args         - args for code (get GitHub access token).
  * @param {String} tokenRequest - to access information from the GitHub user's account.
  */
-exports.requestGithubToken = (parent, args, context) => {
+exports.requestGithubToken = async (parent, args, context) => {
     let tokenRequest = 'https://github.com/login/oauth/access_token?client_id=' + clientId + '&client_secret=' + clientSecret + `&code=${args.code}`;
-    let post = axios.post(tokenRequest)
-        .then(tokenRequest => {
-            console.log(tokenRequest)
-            if (post) {
-                return ({
-                    message: 'Access token for login has been generated',
-                    success: true,
-                    token: tokenRequest
-                });
-            }
-        }).catch(error => {
-            throw new Error({
-                message: 'No Access token generated',
-                success: false,
-                token: error
-            });
-        })
+    let post = await axios.post(tokenRequest)
+    if (post) {
+        return {
+            message: 'Access token for login has been generated',
+            success: true,
+            token: post.data
+        };
+    }
+    return {
+        message: 'No Access token generated',
+        success: false,
+        token: error
+    };
 }
