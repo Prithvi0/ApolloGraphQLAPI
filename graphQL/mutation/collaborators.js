@@ -22,7 +22,7 @@ exports.createCollab = async (parent, args, context) => {
         throw new Error('Invalid user token authentication')
     }
     let userNote = collabModel.findById(args.noteId);
-    let collab = userNote.updateOne({
+    let collab = await userNote.updateOne({
         collabId: args.collabId
     });
     if (!collab) {
@@ -60,7 +60,7 @@ exports.deleteCollab = (parent, args, context) => {
     if (!userAuthorization) {
         throw new Error('Invalid user token authentication')
     }
-    let userNote = collabModel.findByIdAndDelete({ noteId: userAuthorization.id })
+    let userNote = collabModel.findByIdAndDelete({ _id: args.noteId })
     if (userNote) {
         return {
             message: 'Collaborator note has been deleted.',

@@ -5,6 +5,7 @@
 
 // Module imports
 const notesModel = require('../../model/note');
+const labelsModel = require('../../model/label');
 const jwt = require('jsonwebtoken');
 const secret = process.env.SECRET;
 
@@ -15,13 +16,13 @@ const secret = process.env.SECRET;
  * @returns {Error}                            - if User Validations are false based on the input.
  * @returns {String, Boolean} message, success - true (Note saved), else false.
  */
- exports.createNote = async (parent, args, context) => {
+exports.createNote = async (parent, args, context) => {
     let userAuthorization = jwt.verify(context.authorization, secret);
     console.log(context.authorization);
     if (!userAuthorization) {
         throw new Error('Invalid user token authentication')
     }
-    if (!args.description) {
+    if (args.description == null || args.description == undefined) {
         throw new Error('Description can\'t be empty');
     }
     const newNote = new notesModel({
@@ -71,9 +72,9 @@ exports.updateNote = async (parent, args, context) => {
 
 /** It is used to delete the created Notes on userId.
  * @sync
- * @param {String} args         - args for notes.
- * @constructor                 - parent is required.
- * @returns {} message, success - if true (find by user id & delete), else false.
+ * @param {String} args                        - args for notes.
+ * @constructor                                - parent is required.
+ * @returns {String, Boolean} message, success - if true (find by user id & delete), else false.
  */
 exports.deleteNote = async (parent, args, context) => {
     let userNote = await notesModel.findByIdAndDelete(args.id)
@@ -86,6 +87,34 @@ exports.deleteNote = async (parent, args, context) => {
         return {
             message: 'User id not found. Unable to delete.',
             success: false
+        }
+    }
+}
+
+/** It is used to put Labels on noteId.
+ * @sync
+ * @param {String} args                        - args for labels.
+ * @constructor                                - parent is required.
+ * @returns {String, Boolean} message, success - true (find by note id & update), else false.
+ */
+exports.putLabel = async (parent, args, context) => {
+    let userNote = await notesModel.findById({ _id: args.noteId })
+    let userLabel = await labelsModel.findById({ _id: args.labelId })
+    if (userNote.userId != userLabel.userId) {
+        throw new Error('No such label found.')
+    }
+    if (userLabel) {
+        let putlabel = await note.updateOne({ label: userLabel })
+        if (putlabel) {
+            return {
+                message: 'Label has been added to your note.',
+                success: true
+            };
+        } else {
+            return {
+                message: 'Note id not found. Unable to put label.',
+                success: false
+            }
         }
     }
 }

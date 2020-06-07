@@ -27,6 +27,10 @@ const NoteSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
+    Label: {
+        type: Schema.Types.ObjectId,
+        ref: 'Label'
+    },
     archive: {
         type: Boolean,
         default: false

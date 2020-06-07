@@ -21,10 +21,10 @@ exports.createReminder = async (parent, args, context) => {
     if (!userAuthorization) {
         throw new Error("Invalid user token authentication")
     }
-    if (!args.reminder) {
+    if (args.reminder == null || args.reminder == undefined) {
         throw new Error('Reminder can\'t be empty');
     }
-    const newNote = new notesModel({
+    const newReminder = new notesModel({
         title: args.title,
         description: args.description,
         userId: userAuthorization.id,
@@ -32,7 +32,7 @@ exports.createReminder = async (parent, args, context) => {
     });
 
     // save note
-    const saveNote = await newNote.save();
+    const saveNote = await newReminder.save();
     if (saveNote) {
         return {
             message: 'Reminder created!',
