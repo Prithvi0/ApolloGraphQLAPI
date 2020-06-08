@@ -16,9 +16,9 @@ type User {
     lastName : String!
     emailId : String!
     password : String!
-    gitId: String!
-    gitUserName: String!
-    accessToken: String!
+    #gitId: String!
+    #gitUserName: String!
+    #accessToken: String!
 }
 
 # This "Note" type defines the queryable fields for every notes in the data source.
@@ -27,6 +27,10 @@ type Note {
     title : String!
     description : String!
     userId: String!
+    label: Label!
+    archive: Boolean!
+    trash: Boolean!
+    reminder: Date!
 }
 
 # This "Collab" type defines the queryable fields for every note collabs in the data source.
@@ -49,6 +53,9 @@ type Response {
     message : String!
     success : Boolean!
     token: String!
+    gitId: String
+    gitUserName: String
+    accessToken: String
 }
 
 # It lists all available queries that clients can execute along with return type.
@@ -89,5 +96,6 @@ type Mutation {
     setReminder(reminder: Date!): Response
     githubLoginUrl: String!
     requestGithubToken(code: String!): Response
+    githubDetails(accessToken:String!): Response
     githubRepoDetails: Response
 }`

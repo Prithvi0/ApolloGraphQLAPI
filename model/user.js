@@ -37,15 +37,15 @@ const userSchema = new schema({
     },
     gitId: {
         type: String,
-        required: [true, 'gitId required'],
+        required: [false, 'git Id required']
     },
     gitUserName: {
         type: String,
-        required: [true, 'git user name required'],
+        required: [false, 'git user name required']
     },
     accessToken: {
         type: String,
-        required: [true, 'access token required']
+        required: [false, 'access token required']
     }
 },
     {
