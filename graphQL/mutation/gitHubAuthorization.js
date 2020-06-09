@@ -8,16 +8,15 @@ const graphql_clientId = process.env.CLIENT_ID;
 const axios = require('axios');
 const graphql_clientSecret = process.env.CLIENT_SECRET;
 const userModel = require('../../model/user');
-// const access_token = process.env.ACCESS_TOKEN;
 const jwt = require('jsonwebtoken');
-const secret = process.env.SECRET;
+const jwt_secret = process.env.SECRET;
 
 /** It is used to return user code associated with the GitHub.
  * @function (githubLoginUrl)
  * @returns - user login authorization for GitHub.
  */
 exports.githubLoginUrl = () => {
-    let githubLoginUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&scope=user`;
+    let githubLoginUrl = `https://github.com/login/oauth/authorize?client_id=${graphql_clientId}&scope=user`;
     return githubLoginUrl;
 }
 
@@ -31,7 +30,7 @@ exports.githubLoginUrl = () => {
  * @param {String} tokenRequest - to access information from the GitHub user's account.
  */
 exports.requestGithubToken = async (parent, args, context) => {
-    let tokenRequest = `https://github.com/login/oauth/access_token?client_id=${clientId}&client_secret=${clientSecret}&code=${args.code}`;
+    let tokenRequest = `https://github.com/login/oauth/access_token?client_id=${graphql_clientId}&client_secret=${graphql_clientSecret}&code=${args.code}`;
     let post = await axios.post(tokenRequest)
     if (!post) {
         return {
@@ -64,7 +63,7 @@ exports.githubDetails = async (parent, args, context) => {
 }
 
 exports.githubRepoDetails = async (parent, args, context) => {
-    let userAuthorization = jwt.verify(context.authorization, secret);
+    let userAuthorization = jwt.verify(context.authorization, jwt_secret);
     if (!userAuthorization) {
         throw new Error("Invalid user token authentication")
     }
@@ -76,8 +75,8 @@ exports.githubRepoDetails = async (parent, args, context) => {
     let userRepo = await axios.get(accessToken)
     if (userRepo) {
         const newNote = new notesModel({
-            title: 'title',
-            description: 'description',
+            title: userRepo.data.name,
+            description: userRepo.data.description,
             userId: user._id
         });
         // save note
