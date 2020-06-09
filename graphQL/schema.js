@@ -16,9 +16,9 @@ type User {
     lastName : String!
     emailId : String!
     password : String!
-    #gitId: String!
-    #gitUserName: String!
-    #accessToken: String!
+    gitId: String!
+    gitUserName: String!
+    accessToken: String!
 }
 
 # This "Note" type defines the queryable fields for every notes in the data source.
@@ -53,9 +53,6 @@ type Response {
     message : String!
     success : Boolean!
     token: String!
-    gitId: String
-    gitUserName: String
-    accessToken: String
 }
 
 # It lists all available queries that clients can execute along with return type.

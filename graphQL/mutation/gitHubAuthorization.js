@@ -4,9 +4,9 @@
  */
 
 // Module imports
-const clientId = process.env.CLIENT_ID;
+const graphql_clientId = process.env.CLIENT_ID;
 const axios = require('axios');
-const clientSecret = process.env.CLIENT_SECRET;
+const graphql_clientSecret = process.env.CLIENT_SECRET;
 const userModel = require('../../model/user');
 // const access_token = process.env.ACCESS_TOKEN;
 const jwt = require('jsonwebtoken');
@@ -17,7 +17,7 @@ const secret = process.env.SECRET;
  * @returns - user login authorization for GitHub.
  */
 exports.githubLoginUrl = () => {
-    let githubLoginUrl = 'https://github.com/login/oauth/authorize?client_id=' + clientId + '&scope=user';
+    let githubLoginUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&scope=user`;
     return githubLoginUrl;
 }
 
@@ -31,7 +31,7 @@ exports.githubLoginUrl = () => {
  * @param {String} tokenRequest - to access information from the GitHub user's account.
  */
 exports.requestGithubToken = async (parent, args, context) => {
-    let tokenRequest = 'https://github.com/login/oauth/access_token?client_id=' + clientId + '&client_secret=' + clientSecret + `&code=${args.code}`;
+    let tokenRequest = `https://github.com/login/oauth/access_token?client_id=${clientId}&client_secret=${clientSecret}&code=${args.code}`;
     let post = await axios.post(tokenRequest)
     if (!post) {
         return {
@@ -49,9 +49,8 @@ exports.requestGithubToken = async (parent, args, context) => {
 }
 
 exports.githubDetails = async (parent, args, context) => {
-    let accessToken = await axios.get('https://api.github.com/user?access_token=' + args.accessToken);
-    console.log(accessToken);
-    let getGithubEmail = await userModel.findOne({ emailId: accessToken.data.emailId });
+    let accessToken = await axios.get(`https://api.github.com/user?access_token=${args.accessToken}`);
+    let getGithubEmail = await userModel.findOne({ email: accessToken.data.email });
     if (!getGithubEmail) {
         throw new Error('No such e-mail found for GitHub.');
     }
@@ -69,11 +68,11 @@ exports.githubRepoDetails = async (parent, args, context) => {
     if (!userAuthorization) {
         throw new Error("Invalid user token authentication")
     }
-    let user = await userModel.findOne({ emailId: userAuthorization.emailId });
+    let user = await userModel.findOne({ email: userAuthorization.email });
     if (!user) {
         throw new Error('Invalid password reset link')
     }
-    let accessToken = 'https://api.github.com/user?access_token=' + args.accessToken;
+    let accessToken = `https://api.github.com/user?access_token=${args.accessToken}`;
     let userRepo = await axios.get(accessToken)
     if (userRepo) {
         const newNote = new notesModel({
