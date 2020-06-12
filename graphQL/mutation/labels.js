@@ -18,7 +18,7 @@ const secret = process.env.SECRET;
 exports.createLabel = async (parent, args, context) => {
     let userAuthorization = jwt.verify(context.authorization, secret);
     if (!userAuthorization) {
-        throw new Error("Invalid user token authentication")
+        throw new Error('Invalid user token authentication');
     }
     if (!args.labelName) {
         throw new Error('Label name can\'t be empty');
@@ -41,7 +41,7 @@ exports.createLabel = async (parent, args, context) => {
             success: false
         };
     }
-}
+};
 
 /** It is used to edit and update the created Labels on userId.
  * @sync
@@ -49,22 +49,22 @@ exports.createLabel = async (parent, args, context) => {
  * @constructor                                - parent is required.
  * @returns {String, Boolean} message, success - true (find by user id & update), else false.
  */
-exports.updateLabel = async (parent, args, context) => {
+exports.updateLabel = async (parent, args) => {
     let userLabel = await labelsModel.findByIdAndUpdate(args.id, {
         labelName: args.labelName,
-    }, { new: true })
+    }, { new: true });
     if (userLabel) {
         return {
             message: 'User label has been updated.',
             success: true
-        }
+        };
     } else {
         return {
             message: 'User Id not found. Unable to update.',
             success: false
-        }
+        };
     }
-}
+};
 
 /** It is used to delete the created Labels on userId.
  * @sync
@@ -72,17 +72,17 @@ exports.updateLabel = async (parent, args, context) => {
  * @constructor                 - parent is required.
  * @returns {} message, success - if true (find by user id & delete), else false.
  */
-exports.deleteLabel = async(parent, args, context) => {
-    let userLabel = await labelsModel.findByIdAndDelete(args.id)
+exports.deleteLabel = async(parent, args) => {
+    let userLabel = await labelsModel.findByIdAndDelete(args.id);
     if (userLabel) {
         return {
             message: 'User label has been deleted.',
             success: true
-        }
+        };
     } else {
         return {
             message: 'User id not found. Unable to delete.',
             success: false
-        }
+        };
     }
-}
+};

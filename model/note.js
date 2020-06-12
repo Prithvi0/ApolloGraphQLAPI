@@ -11,7 +11,7 @@
 
 // Module imports
 const mongoose = require('mongoose')
-    , Schema = mongoose.Schema
+    , Schema = mongoose.Schema;
 
 // defining mongodb schema for notes
 const NoteSchema = new Schema({
@@ -44,8 +44,8 @@ const NoteSchema = new Schema({
         min: [new Date().getTime() + 1, 'Remind time should be more than current time']
     }
 },
-    {
-        timestamps: true
-    });
+{
+    timestamps: true
+});
 
 module.exports = mongoose.model('Note', NoteSchema);

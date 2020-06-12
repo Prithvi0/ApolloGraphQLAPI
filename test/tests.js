@@ -1,15 +1,16 @@
+/* eslint-disable no-undef */
 /** It comprises of test cases to pass the APIs for GraphQL server.
  * @description     -   Pass a Test case
  */
-const chai = require("chai");
-const chaiHttp = require("chai-http");
+const chai = require('chai');
+const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 require('../server');
 const expect = require('chai').expect;
 const url = 'http://localhost:4000/';
 const request = require('supertest')(url);
-const fs = require("fs");
-const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbElkIjoiY2NjQGdtYWlsLmNvbSIsImlhdCI6MTU5MDk5OTY0MCwiZXhwIjoxNTkyMDM2NDQwfQ.CdROzL4X_NkKlIZtvZRH59WwHLTgDp4QzButNui2zeo'
+const fs = require('fs');
+const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbElkIjoiY2NjQGdtYWlsLmNvbSIsImlhdCI6MTU5MDk5OTY0MCwiZXhwIjoxNTkyMDM2NDQwfQ.CdROzL4X_NkKlIZtvZRH59WwHLTgDp4QzButNui2zeo';
 
 /** It is used to read user data from .json file & pass the APIs for GraphQL server.
  * @function     -   read user data from .json file & parse
@@ -38,10 +39,10 @@ describe('Tests for User API', () => {
             .send({ query: readFile().register })
             .expect(200)
             .end((err, res) => {
-                error(err)
-                expect(JSON.parse(res.text).data.register.message).to.equal("Registration Success!");
-            })
-    })
+                error(err);
+                expect(JSON.parse(res.text).data.register.message).to.equal('Registration Success!');
+            });
+    });
 
     // User login
     it('given user when logged in correctly should return success message', () => {
@@ -49,10 +50,10 @@ describe('Tests for User API', () => {
             .send({ query: readFile().login })
             .expect(200)
             .end((err, res) => {
-                error(err)
-                expect(JSON.parse(res.text).data.login.message).to.equal("Login successful");
-            })
-    })
+                error(err);
+                expect(JSON.parse(res.text).data.login.message).to.equal('Login successful');
+            });
+    });
 
     // forgot password
     it('given user when forgot password should return token as e-mail', () => {
@@ -60,24 +61,24 @@ describe('Tests for User API', () => {
             .send({ query: readFile().forgotPass })
             .expect(200)
             .end((err, res) => {
-                error(err)
-                expect(JSON.parse(res.text).data.forgotPass.message).to.equal("E-mail sent to change password.");
+                error(err);
+                expect(JSON.parse(res.text).data.forgotPass.message).to.equal('E-mail sent to change password.');
                 expect(JSON.parse(res.text).data.forgotPass.success).to.equal(true);
-            })
-    })
+            });
+    });
 
     // reset password
     it('given user when reset password should return token message', () => {
         request.post('/graphql')
-            .set({ "authorization": token })
+            .set({ 'authorization': token })
             .send({ query: readFile().resetPass })
             .expect(200)
             .end((err, res) => {
-                error(err)
-                expect(JSON.parse(res.text).data.resetPass.message).to.equal("Password successfully resetted.")
-                expect(JSON.parse(res.text).data.resetPass.success).to.equal(true)
-            })
-    })
+                error(err);
+                expect(JSON.parse(res.text).data.resetPass.message).to.equal('Password successfully resetted.');
+                expect(JSON.parse(res.text).data.resetPass.success).to.equal(true);
+            });
+    });
 
     // get user by id 
     it('given user when stored in database should return user by Id', () => {
@@ -85,8 +86,8 @@ describe('Tests for User API', () => {
             .send({ query: readFile().userById })
             .expect(200)
             .end((err, res) => {
-                error(err)
-                expect(JSON.parse(res.text).data.userById.firstName).to.equal("shiva");
-            })
-    })
-})
+                error(err);
+                expect(JSON.parse(res.text).data.userById.firstName).to.equal('shiva');
+            });
+    });
+});

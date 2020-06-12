@@ -16,6 +16,7 @@ const { typeDefs } = require('./graphQL/schema');
 const resolvers = require('./graphQL/resolver').resolvers;
 
 // The ApolloServer constructor with parameters: schema definition & set of resolvers
+// eslint-disable-next-line no-undef
 module.exports = server = new ApolloServer({
     typeDefs, resolvers,
     context: ({ req }) => ({
@@ -34,6 +35,7 @@ axios.get(gitHubUser)
     });
 
 // The `listen` method launches a web server
+// eslint-disable-next-line no-undef
 server.listen(port, err => {
     if (err)
         throw new Error(err);

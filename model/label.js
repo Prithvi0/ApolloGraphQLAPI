@@ -7,7 +7,7 @@
 
 // Module imports
 const mongoose = require('mongoose')
-    , Schema = mongoose.Schema
+    , Schema = mongoose.Schema;
 
 // defining mongodb schema for label
 const LabelSchema = new Schema({
@@ -22,8 +22,8 @@ const LabelSchema = new Schema({
         ref: 'User'
     }],
 },
-    {
-        timestamps: true
-    });
+{
+    timestamps: true
+});
 
 module.exports = mongoose.model('Label', LabelSchema);

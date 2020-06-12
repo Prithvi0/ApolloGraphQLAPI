@@ -4,7 +4,7 @@
  */
 
 // Module imports
-const collabModel = require('../../model/collaborator')
+const collabModel = require('../../model/collaborator');
 const jwt = require('jsonwebtoken');
 const secret = process.env.SECRET;
 
@@ -19,14 +19,14 @@ exports.createCollab = async (parent, args, context) => {
     let userAuthorization = jwt.verify(context.authorization, secret);
     console.log(context.authorization);
     if (!userAuthorization) {
-        throw new Error('Invalid user token authentication')
+        throw new Error('Invalid user token authentication');
     }
     let userNote = collabModel.findById(args.noteId);
     let collab = await userNote.updateOne({
         collabId: args.collabId
     });
     if (!collab) {
-        throw new Error('No such collab Id found')
+        throw new Error('No such collab Id found');
     }
     const newNote = new collabModel({
         userId: userAuthorization.id,
@@ -47,7 +47,7 @@ exports.createCollab = async (parent, args, context) => {
             success: false
         };
     }
-}
+};
 
 /** It is used to delete the created Notes on Collaborator Id.
  * @sync
@@ -58,18 +58,18 @@ exports.createCollab = async (parent, args, context) => {
 exports.deleteCollab = (parent, args, context) => {
     let userAuthorization = jwt.verify(context.authorization, secret);
     if (!userAuthorization) {
-        throw new Error('Invalid user token authentication')
+        throw new Error('Invalid user token authentication');
     }
-    let userNote = collabModel.findByIdAndDelete({ _id: args.noteId })
+    let userNote = collabModel.findByIdAndDelete({ _id: args.noteId });
     if (userNote) {
         return {
             message: 'Collaborator note has been deleted.',
             success: true
-        }
+        };
     } else {
         return {
             message: 'Collaborator id not found. Unable to delete.',
             success: false
-        }
+        };
     }
-}
+};

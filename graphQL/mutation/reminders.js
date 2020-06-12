@@ -17,9 +17,9 @@ const secret = process.env.SECRET;
  */
 exports.createReminder = async (parent, args, context) => {
     let userAuthorization = jwt.verify(context.authorization, secret);
-    console.log(context.authorization)
+    console.log(context.authorization);
     if (!userAuthorization) {
-        throw new Error("Invalid user token authentication")
+        throw new Error('Invalid user token authentication');
     }
     if (args.reminder == null || args.reminder == undefined) {
         throw new Error('Reminder can\'t be empty');
@@ -44,7 +44,7 @@ exports.createReminder = async (parent, args, context) => {
             success: false
         };
     }
-}
+};
 
 /** It is used to set a reminder on noteId.
  * @sync
@@ -53,12 +53,12 @@ exports.createReminder = async (parent, args, context) => {
  * @returns {Error}                            - if User Validations are false based on the input.
  * @returns {String, Boolean} message, success - true (Reminder set to note), else false.
  */
-exports.setReminder = async (parent, args, context) => {
-    let userNote = await notesModel.find(args.noteId)
+exports.setReminder = async (parent, args) => {
+    let userNote = await notesModel.find(args.noteId);
     if (!userNote) {
-        throw new Error('No such note id.')
+        throw new Error('No such note id.');
     }
-    let reminder = await notesModel.update({ reminder: args.reminder })
+    let reminder = await notesModel.update({ reminder: args.reminder });
     if (reminder) {
         return {
             message: 'Reminder has been set.',
@@ -70,4 +70,4 @@ exports.setReminder = async (parent, args, context) => {
             success: false
         };
     }
-}
+};

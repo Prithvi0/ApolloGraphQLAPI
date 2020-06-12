@@ -48,8 +48,8 @@ const userSchema = new schema({
         required: [false, 'access token required']
     }
 },
-    {
-        timestamps: true
-    });
+{
+    timestamps: true
+});
 
 module.exports = mongoose.model('User', userSchema);

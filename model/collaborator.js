@@ -8,7 +8,7 @@
 
 // Module imports
 const mongoose = require('mongoose')
-    , Schema = mongoose.Schema
+    , Schema = mongoose.Schema;
 
 // defining mongodb schema for collaborator
 const CollabSchema = new Schema({
@@ -25,8 +25,8 @@ const CollabSchema = new Schema({
         ref: 'Note'
     }
 },
-    {
-        timestamps: true
-    });
+{
+    timestamps: true
+});
 
 module.exports = mongoose.model('Collab', CollabSchema);

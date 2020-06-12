@@ -17,8 +17,8 @@ module.exports = mongoose.connect(process.env.MONGO_URL,
         useCreateIndex: true,
         useFindAndModify: false
     }).then(() => {
-        console.log("Successfully connected to the database");
-    }).catch(err => {
-        console.log('Could not connect to the database. Exiting now...', err);
-        process.exit();
-    });
+    console.log('Successfully connected to the database');
+}).catch(err => {
+    console.log('Could not connect to the database. Exiting now...', err);
+    process.exit();
+});

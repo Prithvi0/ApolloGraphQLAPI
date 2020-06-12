@@ -20,7 +20,7 @@ exports.createNote = async (parent, args, context) => {
     let userAuthorization = jwt.verify(context.authorization, secret);
     console.log(context.authorization);
     if (!userAuthorization) {
-        throw new Error('Invalid user token authentication')
+        throw new Error('Invalid user token authentication');
     }
     if (args.description == null || args.description == undefined) {
         throw new Error('Description can\'t be empty');
@@ -44,7 +44,7 @@ exports.createNote = async (parent, args, context) => {
             success: false
         };
     }
-}
+};
 
 /** It is used to edit and update the created Notes on userId.
  * @sync
@@ -52,23 +52,23 @@ exports.createNote = async (parent, args, context) => {
  * @constructor                                - parent is required.
  * @returns {String, Boolean} message, success - true (find by user id & update), else false.
  */
-exports.updateNote = async (parent, args, context) => {
+exports.updateNote = async (parent, args) => {
     let userNote = await notesModel.findByIdAndUpdate(args.id, {
         title: args.title,
         description: args.description
-    }, { new: true })
+    }, { new: true });
     if (userNote) {
         return {
             message: 'User note has been updated.',
             success: true
-        }
+        };
     } else {
         return {
             message: 'User Id not found. Unable to update.',
             success: false
-        }
+        };
     }
-}
+};
 
 /** It is used to delete the created Notes on userId.
  * @sync
@@ -76,20 +76,20 @@ exports.updateNote = async (parent, args, context) => {
  * @constructor                                - parent is required.
  * @returns {String, Boolean} message, success - if true (find by user id & delete), else false.
  */
-exports.deleteNote = async (parent, args, context) => {
-    let userNote = await notesModel.findByIdAndDelete(args.id)
+exports.deleteNote = async (parent, args) => {
+    let userNote = await notesModel.findByIdAndDelete(args.id);
     if (userNote) {
         return {
             message: 'User note has been deleted.',
             success: true
-        }
+        };
     } else {
         return {
             message: 'User id not found. Unable to delete.',
             success: false
-        }
+        };
     }
-}
+};
 
 /** It is used to put Labels on noteId.
  * @sync
@@ -97,14 +97,14 @@ exports.deleteNote = async (parent, args, context) => {
  * @constructor                                - parent is required.
  * @returns {String, Boolean} message, success - true (find by note id & update), else false.
  */
-exports.putLabel = async (parent, args, context) => {
-    let userNote = await notesModel.findById({ _id: args.noteId })
-    let userLabel = await labelsModel.findById({ _id: args.labelId })
+exports.putLabel = async (parent, args) => {
+    let userNote = await notesModel.findById({ _id: args.noteId });
+    let userLabel = await labelsModel.findById({ _id: args.labelId });
     if (userNote.userId != userLabel.userId) {
-        throw new Error('No such label found.')
+        throw new Error('No such label found.');
     }
     if (userLabel) {
-        let putlabel = await note.updateOne({ label: userLabel })
+        let putlabel = await userNote.updateOne({ label: userLabel });
         if (putlabel) {
             return {
                 message: 'Label has been added to your note.',
@@ -114,10 +114,10 @@ exports.putLabel = async (parent, args, context) => {
             return {
                 message: 'Note id not found. Unable to put label.',
                 success: false
-            }
+            };
         }
     }
-}
+};
 
 /** It is used to archive the created Notes on userId.
  * @sync
@@ -126,20 +126,20 @@ exports.putLabel = async (parent, args, context) => {
  * @returns {String, Boolean} message, success - if true (find by user id & update) for archive note.
  *                                               , else false.
  */
-exports.archiveNote = async (parent, args, context) => {
-    let userNote = await notesModel.findOneAndUpdate(args._id, { archive: true }, { new: true })
+exports.archiveNote = async (parent, args) => {
+    let userNote = await notesModel.findOneAndUpdate(args._id, { archive: true }, { new: true });
     if (userNote) {
         return {
             message: 'User note has been archived.',
             success: true
-        }
+        };
     } else {
         return {
             message: 'Note Id not found. Unable to archive.',
             success: false
-        }
+        };
     }
-}
+};
 
 /** It is used to unarchive the created Notes on userId.
  * @sync
@@ -148,20 +148,20 @@ exports.archiveNote = async (parent, args, context) => {
  * @returns {String, Boolean} message, success - if true (find by user id & update) for unarchive note.
  *                                               , else false.
  */
-exports.unArchiveNote = async (parent, args, context) => {
-    let userNote = await notesModel.findOneAndUpdate(args._id, { archive: false }, { new: true })
+exports.unArchiveNote = async (parent, args) => {
+    let userNote = await notesModel.findOneAndUpdate(args._id, { archive: false }, { new: true });
     if (userNote) {
         return {
             message: 'User note has been unarchived.',
             success: true
-        }
+        };
     } else {
         return {
             message: 'Note Id not found. Unable to unarchive.',
             success: false
-        }
+        };
     }
-}
+};
 
 /** It is used to trash the created Notes on userId.
  * @sync
@@ -170,20 +170,20 @@ exports.unArchiveNote = async (parent, args, context) => {
  * @returns {String, Boolean} message, success - if true (find by user id & update) for trash note.
  *                                               , else false.
  */
-exports.trashNote = async (parent, args, context) => {
-    let userNote = await notesModel.findOneAndUpdate(args._id, { trash: true }, { new: true })
+exports.trashNote = async (parent, args) => {
+    let userNote = await notesModel.findOneAndUpdate(args._id, { trash: true }, { new: true });
     if (userNote) {
         return {
             message: 'User note has been moved to trash.',
             success: true
-        }
+        };
     } else {
         return {
             message: 'Note Id not found. Unable to trash.',
             success: false
-        }
+        };
     }
-}
+};
 
 /** It is used to untrash the created Notes on userId.
  * @sync
@@ -192,17 +192,17 @@ exports.trashNote = async (parent, args, context) => {
  * @returns {String, Boolean} message, success - if true (find by user id & update) for untrash note.
  *                                               , else false.
  */
-exports.unTrashNote = async (parent, args, context) => {
-    let userNote = await notesModel.findOneAndUpdate(args._id, { trash: false }, { new: true })
+exports.unTrashNote = async (parent, args) => {
+    let userNote = await notesModel.findOneAndUpdate(args._id, { trash: false }, { new: true });
     if (userNote) {
         return {
             message: 'User note has been removed from trash.',
             success: true
-        }
+        };
     } else {
         return {
             message: 'NoteId not found. Unable to untrash.',
             success: false
-        }
+        };
     }
-}
+};

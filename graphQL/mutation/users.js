@@ -21,23 +21,23 @@ let shortUrl = require('node-url-shortener');
  * @returns {Error}                            - if User Validations are false based on the input.
  * @returns {String, Boolean} message, success - true (User saved), else false.
  */
-exports.register = async (parent, args, context) => {
+exports.register = async (parent, args) => {
     // validate user first name
     if (args.firstName === null) {
-        throw new Error('First name cannot be blank.')
+        throw new Error('First name cannot be blank.');
     }
 
     // validate user last name
     if (args.lastName === null) {
-        throw new Error('Last name cannot be blank.')
+        throw new Error('Last name cannot be blank.');
     }
 
     if (args.firstName.length < 3 || args.lastName.length < 3) {
-        throw new Error('Minimum of 3 characters required.')
+        throw new Error('Minimum of 3 characters required.');
     }
 
     // validate e-mail
-    const emailRegex = /^[a-zA-Z]+([+-_.][a-zA-Z0-9])*[0-9]*\@[a-z0-9]+[.]([a-z]{2,4}[.])?[a-z]{2,4}$/;
+    const emailRegex = /^[a-zA-Z]+([+-_.][a-zA-Z0-9])*[0-9]*@[a-z0-9]+[.]([a-z]{2,4}[.])?[a-z]{2,4}$/;
     if (args.emailId === null) {
         throw new Error('E-mail can not be blank. Please try entering a valid e-mail.');
     }
@@ -84,7 +84,7 @@ exports.register = async (parent, args, context) => {
             success: false
         };
     }
-}
+};
 
 /** It is used to Login the User using emailId & password.
  * @sync
@@ -93,28 +93,28 @@ exports.register = async (parent, args, context) => {
  * @returns {String, Boolean, ID} message, success, token - true (User emailId is signed by JSON Web Token (JWT))
  * & made private by adding a secret key in .env file, else returns false.
  */
-exports.login = async (parent, args, context) => {
+exports.login = async (parent, args) => {
     let user = await userModel.findOne({
         emailId: args.emailId
     });
-    let comparePass = await bcrypt.compare(args.password, user.password)
+    let comparePass = await bcrypt.compare(args.password, user.password);
     if (comparePass) {
         let token = jwt.sign(
             {
                 emailId: user.emailId
-            }, secret, { expiresIn: "12d" });
+            }, secret, { expiresIn: '12d' });
         return {
             message: 'Login successful',
             success: true,
             token: token
-        }
+        };
     }
     return {
         message: 'Invalid password. Authentication failed',
         success: false,
         token: 'invalid'
-    }
-}
+    };
+};
 
 /** It is used when user forgets the password. A url is sent as an e-mail.
  * @sync
@@ -122,7 +122,7 @@ exports.login = async (parent, args, context) => {
  *                                                   an e-mail of graphql url, JWT attached is sent.
  * @returns {String, Boolean, ID} message, success - true (valid user emailId), else returns false.
  */
-exports.forgotPassword = async (parent, args, context) => {
+exports.forgotPassword = async (parent, args) => {
     let user = await userModel.findOne({
         emailId: args.emailId
     });
@@ -135,14 +135,14 @@ exports.forgotPassword = async (parent, args, context) => {
         return {
             message: 'E-mail sent to change password.',
             success: true
-        }
+        };
     } else {
         return {
             message: 'Not a valid request.',
             success: false
-        }
+        };
     }
-}
+};
 
 /** It is used to Reset User password by providing user headers authorization token (JWT),
  * generated for the user when logged in.
@@ -158,17 +158,17 @@ exports.forgotPassword = async (parent, args, context) => {
  */
 exports.resetPassword = async (parent, args, context) => {
     let userAuthorization = jwt.verify(context.authorization, secret);
-    console.log(userAuthorization)
+    console.log(userAuthorization);
     if (!userAuthorization) {
-        throw new Error("Invalid user token authentication")
+        throw new Error('Invalid user token authentication');
     }
     console.log(userAuthorization.emailId);
     let user = await userModel.findOne({ emailId: userAuthorization.emailId });
     if (!user) {
-        throw new Error('Invalid password reset link')
+        throw new Error('Invalid password reset link');
     }
     if (args.newPass) {
-        let newPassword = bcrypt.hashSync(args.newPass, 12)
+        let newPassword = bcrypt.hashSync(args.newPass, 12);
         let updateUser = await user.updateOne(
             { password: newPassword });
         if (updateUser) {
@@ -183,7 +183,7 @@ exports.resetPassword = async (parent, args, context) => {
             };
         }
     }
-}
+};
 
 /** It is used to generate a shortened url.
  * @function (urlShort)
@@ -193,4 +193,4 @@ exports.urlShort = urlShort => {
     shortUrl.short(urlShort, (err, urlShort) => {
         mail.sendEmail(urlShort);
     });
-}
+};

@@ -25,7 +25,7 @@ exports.sendEmail = token => {
         if (error) {
             console.log(error);
         } else {
-            console.log("E-mail sent" + info.response);
+            console.log(`E-mail sent ${info.response}`);
         }
     });
-}
+};

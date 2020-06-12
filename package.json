@@ -5,7 +5,10 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon server.js",
-    "test": "mocha test"
+    "test": "mocha test",
+    "lint": "eslint .",
+    "lint:fix": "npm run --lint silent -- --fix",
+    "lint:watch": "onchange \"src/**/*.js\" -- npm run lint --silent"
   },
   "keywords": [],
   "author": "",

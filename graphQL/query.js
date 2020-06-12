@@ -14,7 +14,7 @@ const collabsModel = require('../model/collaborator');
  */
 exports.message = () => {
     return 'Welcome User!';
-}
+};
 
 /** It returns a user using Id.
  * @function (getUserById)
@@ -24,7 +24,7 @@ exports.message = () => {
  */
 exports.getUserById = (parent, args) => {
     return userModel.findById(args.id).exec();
-}
+};
 
 /** It returns all users.
  * @function (getAllUsers)
@@ -32,7 +32,7 @@ exports.getUserById = (parent, args) => {
  */
 exports.getAllUsers = () => {
     return userModel.find().exec();
-}
+};
 
 /** It returns notes on userId.
  * @function (getNotesByUserId)
@@ -42,7 +42,7 @@ exports.getAllUsers = () => {
  */
 exports.getNotesByUserId = (parent, args) => {
     return notesModel.findById(args.userId).exec();
-}
+};
 
 /** It returns all notes.
  * @function (getAllNotes)
@@ -50,7 +50,7 @@ exports.getNotesByUserId = (parent, args) => {
  */
 exports.getAllNotes = () => {
     return notesModel.find({ archive: { $ne: true }, trash: { $ne: true } }).populate('Note').exec();
-}
+};
 
 /** It returns labels on userId.
  * @function (getLabelsByUserId)
@@ -59,7 +59,7 @@ exports.getAllNotes = () => {
  */
 exports.getLabelsByUserId = (parent, args) => {
     return labelsModel.findById(args.userId).exec();
-}
+};
 
 /** It returns all labels.
  * @function (getAllLabels)
@@ -67,7 +67,7 @@ exports.getLabelsByUserId = (parent, args) => {
  */
 exports.getAllLabels = () => {
     return labelsModel.find().exec();
-}
+};
 
 /** It returns collabs on userId.
  * @function (getCollabsByUserId)
@@ -76,7 +76,7 @@ exports.getAllLabels = () => {
  */
 exports.getCollabsByUserId = (parent, args) => {
     return collabsModel.findById(args.userId).exec();
-}
+};
 
 /** It returns all archived notes.
  * @function (getArchiveNotes)
@@ -84,7 +84,7 @@ exports.getCollabsByUserId = (parent, args) => {
  */
 exports.getArchiveNotes = () => {
     return notesModel.find({ archive: true }).exec();
-}
+};
 
 /** It returns all trashed notes.
  * @function (getTrashNotes)
@@ -92,7 +92,7 @@ exports.getArchiveNotes = () => {
  */
 exports.getTrashNotes = () => {
     return notesModel.find({ trash: true }).exec();
-}
+};
 
 /** It returns all reminders.
  * @function (getReminders)
@@ -101,4 +101,4 @@ exports.getTrashNotes = () => {
  */
 exports.getReminders = (parent, args) => {
     return notesModel.find(args.reminder).exec();
-}
+};
